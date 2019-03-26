@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class NoteDetail extends StatefulWidget {
+
+  final String appBarTitle;
+
+  NoteDetail(this.appBarTitle);
+
   @override
   State<StatefulWidget> createState() {
     return _NoteDetailState();
@@ -19,7 +24,7 @@ class _NoteDetailState extends State<NoteDetail> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Note'),
+        title: Text(widget.appBarTitle),
       ),
       body: Padding(
         padding: EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0),
@@ -52,7 +57,8 @@ class _NoteDetailState extends State<NoteDetail> {
                 style: textstyle,
                 onChanged: (value) {
                   debugPrint(
-                      'Something changed in the title text field as $value');
+                      'Something changed in the title text field as $value'
+                      );
                 },
                 decoration: InputDecoration(
                     labelStyle: textstyle,
