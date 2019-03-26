@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class NoteDetail extends StatefulWidget {
-
   final String appBarTitle;
 
   NoteDetail(this.appBarTitle);
@@ -25,6 +24,12 @@ class _NoteDetailState extends State<NoteDetail> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.appBarTitle),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0),
@@ -57,8 +62,7 @@ class _NoteDetailState extends State<NoteDetail> {
                 style: textstyle,
                 onChanged: (value) {
                   debugPrint(
-                      'Something changed in the title text field as $value'
-                      );
+                      'Something changed in the title text field as $value');
                 },
                 decoration: InputDecoration(
                     labelStyle: textstyle,
@@ -98,17 +102,17 @@ class _NoteDetailState extends State<NoteDetail> {
                       child: Text(
                         'Save',
                         textScaleFactor: 1.5,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                           debugPrint('Pressed the save button');  
-                          });
-                        },
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          debugPrint('Pressed the save button');
+                        });
+                      },
                     ),
                   ),
-
-                  Container(width: 5.0,),
-
+                  Container(
+                    width: 5.0,
+                  ),
                   Expanded(
                     child: RaisedButton(
                       color: Theme.of(context).primaryColorDark,
@@ -116,15 +120,14 @@ class _NoteDetailState extends State<NoteDetail> {
                       child: Text(
                         'Delete',
                         textScaleFactor: 1.5,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                           debugPrint('Pressed the delete button');  
-                          });
-                        },
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          debugPrint('Pressed the delete button');
+                        });
+                      },
                     ),
                   )
-
                 ],
               ),
             )
