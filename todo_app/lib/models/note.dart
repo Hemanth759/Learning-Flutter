@@ -34,6 +34,10 @@ class Note {
     this._date = newdate;
   }
 
+  set description(String newdescription) {
+    this._description = newdescription;
+  }
+
   //Creating function to convert note object to map object
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = new Map<String, dynamic>();
@@ -44,5 +48,16 @@ class Note {
     map['priority'] = _priority;
     map['description'] = _description;
     map['date'] = _date;
+
+    return map;
+  }
+
+  //Extract the map to object
+  Note.fromMapObject(Map<String, dynamic> map) {
+    this._id = map['id'];
+    this._title = map['title'];
+    this._priority = map['priority'];
+    this._description = map['description'];
+    this._date = map['date'];
   }
 }

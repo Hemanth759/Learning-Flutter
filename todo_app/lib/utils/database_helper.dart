@@ -69,6 +69,8 @@ class DatabaseHelper {
   Future<int> updateNote(Note note) async {
     Database db = await this.database;
     var result = db.update(noteTable, note.toMap(), where: '$colId = ?', whereArgs: [note.id]);
+    // var result = await db.rawQuery('INSERT INTO $noteTable($colId, $colTitle, $colPriority, $colDate, $colDescription) VALUES'
+    //                   ' (${note.id},${note.title},${note.priority},${note.date},${note.description})');
     return result;
   }
 
@@ -85,6 +87,18 @@ class DatabaseHelper {
     List<Map<String, dynamic>> countMap = await db.rawQuery('SELECT COUNT (*) FROM $noteTable');
     int result = Sqflite.firstIntValue(countMap);
     return result;
+  }
+
+  // Get the map list and convert it to note list
+  Future<List<Note>> getNoteList() async {
+    var noteMapList = await getNoteMapList();
+    int count =noteMapList.length;
+
+    List<Note> noteList =List<Note>();
+    for(int i = 0;i<count;i++) {
+      noteList.add(Note.fromMapObject(noteMapList[i]));
+    }
+    return noteList;
   }
 
 }
