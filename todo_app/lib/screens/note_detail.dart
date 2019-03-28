@@ -1,9 +1,6 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:todo_app/screens/note_detail.dart';
 import 'package:todo_app/models/note.dart';
 import 'package:todo_app/utils/database_helper.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:intl/intl.dart';
 
 class NoteDetail extends StatefulWidget {

@@ -28,7 +28,7 @@ class _NoteListState extends State<NoteList> {
       appBar: AppBar(
         title: Text('Notes'),
       ),
-      body: GetListView(),
+      body: getListView(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
@@ -40,7 +40,7 @@ class _NoteListState extends State<NoteList> {
     );
   }
 
-  ListView GetListView() {
+  ListView getListView() {
     TextStyle titlestyle = Theme.of(context).textTheme.subhead;
 
     return ListView.builder(
