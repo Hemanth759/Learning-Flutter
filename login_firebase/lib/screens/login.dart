@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:login_firebase/screens/register.dart';
+import 'package:login_firebase/screens/view_users.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -51,6 +52,10 @@ class _LoginPageState extends State<LoginPage> {
                 FlatButton(
                   child: Text('Register', style: TextStyle(fontSize: 15.0),),
                   onPressed: moveToRegisterScreen,
+                ),
+                FlatButton(
+                  child: Text('View All Users'),
+                  onPressed: moveToUsersViewScreen,
                 )
               ],
             ),
@@ -78,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
         email: _email,
         password: _password,
       );
-      debugPrint('user: ${user.uid}');
+      debugPrint('Successfully logged into user: ${user.uid}');
       }
       catch (error) {
         print('error: $error');
@@ -92,6 +97,12 @@ class _LoginPageState extends State<LoginPage> {
   void moveToRegisterScreen() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return RegisterPage();
+    }));
+  }
+
+  void moveToUsersViewScreen() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return ViewUsers();
     }));
   }
 }

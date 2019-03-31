@@ -94,7 +94,7 @@ class DatabaseHelper {
     var noteMapList = await getNoteMapList();
     int count =noteMapList.length;
 
-    List<Note> noteList =List<Note>();
+    List<Note> noteList = List<Note>();
     for(int i = 0;i<count;i++) {
       noteList.add(Note.fromMapObject(noteMapList[i]));
     }

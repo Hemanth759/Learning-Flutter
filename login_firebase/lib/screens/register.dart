@@ -1,5 +1,10 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'package:login_firebase/utils/database_helper.dart';
+import 'package:login_firebase/models/user.dart';
 
 class RegisterPage extends StatefulWidget {
   
@@ -11,6 +16,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   
+  DatabaseHelper databaseHelper = DatabaseHelper();
   final GlobalKey<FormState> formkey =GlobalKey<FormState>();
 
   String _email;
@@ -72,11 +78,38 @@ bool validateLoginForm() {
         email: _email,
         password: _password,
         );
-        print('User :: ${user.uid}');
+        debugPrint('successfully registered User : ${user.uid}');
+        _saveUserToDatabase(user);
       }
       catch (error) {
         print('error: '+error);
       }
     }
+  }
+
+  void _saveUserToDatabase(FirebaseUser fuser) async {
+    // Navigator.pop(context);
+    User user = User(fuser.email, 'Farmer');
+    int result = await databaseHelper.insertUser(user);
+
+    if(result == 0) {
+      _showAlertDialog('Status','Problem saving user to database');
+    }
+    else {
+      _showAlertDialog('Status','Successfully save user to database');
+    }
+  }
+
+  void _showAlertDialog(String title, String message) {
+    AlertDialog alertDialog = AlertDialog(
+      title: Text(title),
+      content: Text(message),
+    );
+    showDialog(
+      context: context,
+      builder: (_) {
+        return alertDialog;
+      }
+    );
   }
 }
