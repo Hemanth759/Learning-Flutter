@@ -15,7 +15,7 @@ before_script:
 script:
   - cd todo_app
   - ../flutter/bin/flutter test
-  - cd ../firebase_login
+  - cd ../login_firebase
   - ../flutter/bin/flutter test
 cache:
   directories:
