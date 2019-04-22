@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:login_firebase/screens/login.dart';
-import 'package:login_firebase/screens/register.dart';
 
 void main() => runApp(new MyApp());
 
