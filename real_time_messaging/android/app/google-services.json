@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "329137081668",
+    "firebase_url": "https://realtimemessagingapp.firebaseio.com",
+    "project_id": "realtimemessagingapp",
+    "storage_bucket": "realtimemessagingapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:329137081668:android:2a8b59b8a6d22ac9",
+        "android_client_info": {
+          "package_name": "com.example.real_time_messaging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "329137081668-v3jksn8qnuljns1vptbgvvg8a15d6m5m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.real_time_messaging",
+            "certificate_hash": "b68ea93cf8d6807f09e18c141ffa5797996b8d43"
+          }
+        },
+        {
+          "client_id": "329137081668-sduli9c9pu3q74c56vva83grke5tdkn3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdGOw_52hB60YP88hj_ouTW9cBi939Xrw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "329137081668-sduli9c9pu3q74c56vva83grke5tdkn3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
