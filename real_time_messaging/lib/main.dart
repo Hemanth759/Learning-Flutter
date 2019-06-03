@@ -15,7 +15,9 @@ class MainApp extends StatelessWidget {
       title: 'Chat Box',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        brightness: Brightness.dark,
+        primaryColor: Colors.red[400],
+        accentColor: Colors.teal,
       ),
       routes: <String, WidgetBuilder> {
         '/' : (context) => HomePage(),
