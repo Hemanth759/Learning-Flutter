@@ -21,7 +21,7 @@ class _HomeState extends State<HomePage> {
     _isLoading = false;
 
     verifyLoginStatus();
-
+  
     super.initState();
   }
 
@@ -29,12 +29,16 @@ class _HomeState extends State<HomePage> {
     bool loginStatus = await BaseAuth().isLoggedIn();
     if (loginStatus) {
       debugPrint('user has been logged in');
-      _isLoggedIn = true;
+      setState(() {
+       _isLoggedIn = true; 
+      });
       // Navigator.of(context).pushReplacementNamed('homePage');
     }
     else {
       debugPrint('no user logged in');
-      _isLoggedIn = false;
+      setState(() {
+       _isLoggedIn = false; 
+      });
     }
   }
 

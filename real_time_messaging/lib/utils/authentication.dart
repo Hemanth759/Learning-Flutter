@@ -27,7 +27,9 @@ class BaseAuth {
   /// returns true if logged in
   Future<bool> isLoggedIn() async {
     FirebaseUser user = await getLoggedInUser();
-    if(user == null) {
+    GoogleSignInAccount googleSignInAccount = googleSignIn.currentUser;
+    debugPrint('google account user is: $googleSignInAccount');
+    if(user == null || googleSignInAccount == null ) {
       return false;
     }
     return true;
@@ -48,11 +50,11 @@ class BaseAuth {
 
   /// handles google signin and logins to firebase and returns firebase user
   Future<FirebaseUser> handleGoogleSignIn() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
 
     GoogleSignInAccount googleUser = await googleSignIn.signIn();
-    debugPrint('got google user ${googleUser.email}');
+    // debugPrint('got google user ${googleUser.email}');
     GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    debugPrint('google user is: ${googleSignIn.currentUser}');
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
