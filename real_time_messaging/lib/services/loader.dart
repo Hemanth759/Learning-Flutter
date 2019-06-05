@@ -10,6 +10,8 @@ class Loader extends StatefulWidget {
 class _LoaderState extends State<Loader> {
   @override
   Widget build(BuildContext context) {
-    return CircularProgressIndicator();
+    return Center(
+      child: CircularProgressIndicator(),
+    );
   }
 }

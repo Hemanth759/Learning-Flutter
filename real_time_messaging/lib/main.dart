@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:real_time_messaging/pages/homePage.dart';
+import 'package:real_time_messaging/pages/home/homePage.dart';
+import 'package:real_time_messaging/pages/login/login.dart';
 import 'package:real_time_messaging/pages/notFoundPage.dart';
 
 void main() {
@@ -21,6 +22,7 @@ class MainApp extends StatelessWidget {
       ),
       routes: <String, WidgetBuilder> {
         '/' : (context) => HomePage(),
+        '/login' : (context) => LoginPage(),
       },
       onUnknownRoute: (RouteSettings settings) {
         String unknownRoute = settings.name;
