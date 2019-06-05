@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:real_time_messaging/utils/authentication.dart';
+import 'package:real_time_messaging/services/authentication.dart';
 
 class HomePage extends StatefulWidget {
   @override
