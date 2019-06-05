@@ -4,6 +4,8 @@ import 'package:flutter/rendering.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'package:real_time_messaging/services/firestoreCRUD.dart';
+
 class BaseAuth {
 
   static BaseAuth _baseAuth;
@@ -62,7 +64,8 @@ class BaseAuth {
     );
 
     FirebaseUser firebaseUser = await firebaseAuth.signInWithCredential(credential);
-    
+    await FireStoreCRUD().checkAndSave(firebaseUser);
+
     return firebaseUser;
   }
 

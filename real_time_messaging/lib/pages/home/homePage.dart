@@ -52,17 +52,13 @@ class _HomeState extends State<HomePage> {
     SizeConfig().init(context);
     return WillPopScope(
       onWillPop: () {
-        /// code for the exit app here
+        /// TODO: code for the exit app here
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Padding(
-            padding: EdgeInsets.only(right: SizeConfig.blockSizeHorizontal*13),
-            child: Center(
-              child: Text('Home Page'),
-            ),
-          )
-        ),
+          title: Text('Home Page'),
+          centerTitle: true,
+          ),
         drawer: Drawer(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
