@@ -21,14 +21,16 @@ class MainApp extends StatelessWidget {
         primaryColor: Colors.red[400],
         accentColor: Colors.teal,
       ),
+      initialRoute: '/',
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
-          case '/':
+          case '/home':
+            Map<String, String> currentUser = settings.arguments;
             return MaterialPageRoute(
-              builder: (context) => HomePage(),
+              builder: (context) => HomePage(currentUser: currentUser,),
             );
             break;
-          case '/login':
+          case '/':
             return MaterialPageRoute(
               builder: (context) => LoginPage(),
             );

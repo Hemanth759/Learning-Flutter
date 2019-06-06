@@ -3,10 +3,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:real_time_messaging/services/authentication.dart';
+import 'package:real_time_messaging/services/secureStorageCRUD.dart';
 import 'package:real_time_messaging/utils/sizeconfig.dart';
 import 'package:real_time_messaging/services/loader.dart';
 
 class HomePage extends StatefulWidget {
+
+  final Map<String, String> currentUser;
+  HomePage({Key key,this.currentUser});
+
   @override
   State<StatefulWidget> createState() {
     return _HomeState();
@@ -43,7 +48,7 @@ class _HomeState extends State<HomePage> {
       setState(() {
        
       });
-      Navigator.of(context).pushReplacementNamed('/login');
+      Navigator.of(context).pushReplacementNamed('/');
     }
   }
 
@@ -88,6 +93,7 @@ class _HomeState extends State<HomePage> {
     });
 
     await BaseAuth().signOut();
-    Navigator.of(context).pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+    await SecureStorage().deleteAll();
+    Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
   }
 }

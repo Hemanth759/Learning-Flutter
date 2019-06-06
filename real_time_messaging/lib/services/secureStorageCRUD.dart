@@ -1,29 +1,34 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:real_time_messaging/models/secureStorage.dart';
+import 'package:real_time_messaging/services/firestoreCRUD.dart';
 
-class SecureStorageCRUD {
+class SecureStorage {
   // static variables
-  static SecureStorageCRUD _secureStorage;
+  static SecureStorage _secureStorage;
   static FlutterSecureStorage _flutterSecureStorage = FlutterSecureStorage();
-  SecureStorageCRUD._createInstance();
+  static FireStoreCRUD _fireStoreCRUD = FireStoreCRUD();
+  SecureStorage._createInstance();
 
-  factory SecureStorageCRUD() {
+  factory SecureStorage() {
     if(_secureStorage == null) {
-      _secureStorage = SecureStorageCRUD._createInstance();
+      _secureStorage = SecureStorage._createInstance();
     }
     return _secureStorage;
   }
 
   // getter functions
   FlutterSecureStorage get flutterSecureStorage => _flutterSecureStorage;
+  FireStoreCRUD get firestoreCRUD => _fireStoreCRUD;
 
   /// returns all the securely stored values as 
   /// list of securestorageitems
-  Future<List<SecureStorageItem>> getAllValues() async {
+  Future<Map<String,String>> getAllValues() async {
     final all = await flutterSecureStorage.readAll();
-    return all.keys.map((key) => SecureStorageItem(key: key, value: all[key])).toList(growable: false);
+    debugPrint('all local storage values are: $all');
+    return all;
   }
 
   /// deletes all the securely stored items
@@ -32,14 +37,20 @@ class SecureStorageCRUD {
   }
 
   /// adds a securestorageitem to the secure storage
-  Future<void> addItem({@required SecureStorageItem item}) async {
-    await flutterSecureStorage.write(key: item.key, value: item.value);
+  Future<void> _addItem({@required key, @required value}) async {
+    await flutterSecureStorage.write(key: key, value: value);
     return;
   }
 
+  Future<void> addData({@required FirebaseUser firebaseUser}) async {
+    // gets the document using document id
+    DocumentSnapshot doc = await firestoreCRUD.getDocumentById(firebaseUser.uid);
+    doc.data.forEach((key, value) async { return await SecureStorage()._addItem(key: key, value: value); });
+  }
+
   /// returns a securestorageitem with given key
-  Future<SecureStorageItem> readItemWithKey({@required String key}) async {
+  Future<String> readItemWithKey({@required String key}) async {
     String value = await flutterSecureStorage.read(key: key);
-    return SecureStorageItem(key: key, value: value);
+    return value;
   }
 }

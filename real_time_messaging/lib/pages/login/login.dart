@@ -1,9 +1,14 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+
 import 'package:real_time_messaging/services/authentication.dart';
+import 'package:real_time_messaging/services/firestoreCRUD.dart';
+import 'package:real_time_messaging/services/secureStorageCRUD.dart';
 import 'package:real_time_messaging/services/loader.dart';
+
 
 class LoginPage extends StatefulWidget {
   @override
@@ -14,13 +19,12 @@ class LoginPage extends StatefulWidget {
 
 class _LoginState extends State<LoginPage> {
 
+  Map<String, String> _currentUser;
   bool _isLoading;
 
   @override
   void initState() {
-    setState(() {
-     _isLoading = false; 
-    });
+    verifyUserStatus();
     super.initState();
   }
 
@@ -44,12 +48,55 @@ class _LoginState extends State<LoginPage> {
     );
   }
 
+  /// redirects to home page
+  void navigateToHome() {
+    Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false, arguments: _currentUser);
+    return;
+  }
+
+  /// verifies user login information and redirects to 
+  /// home page if user is logged in
+  Future<void> verifyUserStatus() async {
+    setState(() {
+     _isLoading = true; 
+    });
+    _currentUser = await SecureStorage().getAllValues();
+    final bool userstatus = await BaseAuth().isLoggedIn();
+
+    if(userstatus) {
+      navigateToHome();
+    }
+
+    setState(() {
+     _isLoading = false; 
+    });
+  }
+
+  
+
   Future<void> handleSignIn() async {
     setState(() {
      _isLoading = true; 
     });
 
-    await BaseAuth().handleGoogleSignIn();
-    Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+    FirebaseUser firebaseUser = await BaseAuth().handleGoogleSignIn();
+    final bool _isFirstTime = await saveToFirestore(firebaseUser);
+    if(_isFirstTime) {
+      await updateLocalStorage(firebaseUser);
+    }
+    navigateToHome();
+  }
+
+  /// saves to firestore if user is first time user 
+  /// and returns true or false if not a first time user
+  Future<bool> saveToFirestore(FirebaseUser user) async {
+    final bool _isFirstTime = await FireStoreCRUD().checkAndSave(user);
+    return _isFirstTime;
+  }
+
+  /// updates the local shared variables
+  Future<void> updateLocalStorage(FirebaseUser user) async {
+    await SecureStorage().addData(firebaseUser: user);
+    _currentUser = await SecureStorage().getAllValues();
   }
 }
