@@ -50,7 +50,8 @@ class BaseAuth {
     return firebaseAuth.currentUser();
   }
 
-  /// handles google signin and logins to firebase and returns firebase user
+  /// handles google signin and logins to
+  /// firebase and returns firebase user
   Future<FirebaseUser> handleGoogleSignIn() async {
 
     GoogleSignInAccount googleUser = await googleSignIn.signIn();
