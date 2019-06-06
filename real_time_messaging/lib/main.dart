@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:real_time_messaging/pages/home/homePage.dart';
 import 'package:real_time_messaging/pages/login/login.dart';
+import 'package:real_time_messaging/pages/editProfile/editprofile.dart';
 import 'package:real_time_messaging/pages/notFoundPage.dart';
 
 void main() {
@@ -20,9 +21,24 @@ class MainApp extends StatelessWidget {
         primaryColor: Colors.red[400],
         accentColor: Colors.teal,
       ),
-      routes: <String, WidgetBuilder> {
-        '/' : (context) => HomePage(),
-        '/login' : (context) => LoginPage(),
+      onGenerateRoute: (RouteSettings settings) {
+        switch (settings.name) {
+          case '/':
+            return MaterialPageRoute(
+              builder: (context) => HomePage(),
+            );
+            break;
+          case '/login':
+            return MaterialPageRoute(
+              builder: (context) => LoginPage(),
+            );
+            break;
+          case '/editProfile':
+            return MaterialPageRoute(
+              builder: (context) => EditProfilePage(),
+            );
+            break;
+        }
       },
       onUnknownRoute: (RouteSettings settings) {
         String unknownRoute = settings.name;
