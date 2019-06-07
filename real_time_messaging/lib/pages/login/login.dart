@@ -8,6 +8,7 @@ import 'package:real_time_messaging/services/authentication.dart';
 import 'package:real_time_messaging/services/firestoreCRUD.dart';
 import 'package:real_time_messaging/services/secureStorageCRUD.dart';
 import 'package:real_time_messaging/services/loader.dart';
+import 'package:real_time_messaging/utils/sizeconfig.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -60,7 +61,7 @@ class _LoginState extends State<LoginPage> {
           color: Theme.of(context).primaryColor,
           margin: EdgeInsets.all(0.0),
           padding: EdgeInsets.only(bottom: 10, top: 10),
-          height: 100.0,
+          height: 100,
           child: Column(
             children: <Widget>[
               Container(

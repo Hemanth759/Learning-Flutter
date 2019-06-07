@@ -89,7 +89,7 @@ class _HomeState extends State<HomePage> {
           color: Theme.of(context).primaryColor,
           margin: EdgeInsets.all(0.0),
           padding: EdgeInsets.only(bottom: 10, top: 10),
-          height: 100.0,
+          height: 100,
           child: Column(
             children: <Widget>[
               Container(
@@ -171,7 +171,7 @@ class _HomeState extends State<HomePage> {
     
     if(_shouldExit) {
       exit(0);
-      return false;
     }
+    return false;
   }
 }
