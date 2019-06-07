@@ -61,6 +61,7 @@ class _HomeState extends State<HomePage> {
           drawer: buildDrawerWidget(
             context: context,
             handleSignout: _handleSignOut,
+            currentUser: widget.currentUser,
           ),
           body: _isLoading == false
               ? Container(

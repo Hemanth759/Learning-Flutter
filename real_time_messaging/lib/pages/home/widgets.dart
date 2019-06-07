@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:real_time_messaging/utils/sizeconfig.dart';
 
-Widget buildDrawerWidget({@required Function handleSignout, @required BuildContext context}) {
+Widget buildDrawerWidget(
+    {@required Function handleSignout,
+    @required BuildContext context,
+    @required Map<String, String> currentUser}) {
   return Drawer(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -13,7 +16,8 @@ Widget buildDrawerWidget({@required Function handleSignout, @required BuildConte
         ListTile(
           title: Text('Edit Profile'),
           onTap: () {
-            Navigator.of(context).pushNamed('/editProfile');
+            Navigator.of(context)
+                .pushNamed('/editProfile', arguments: currentUser);
           },
         ),
         ListTile(

@@ -36,8 +36,10 @@ class MainApp extends StatelessWidget {
             );
             break;
           case '/editProfile':
+            Map<String,String> user = settings.arguments;
+            // debugPrint('routing level arguments: ${settings.arguments}');
             return MaterialPageRoute(
-              builder: (context) => EditProfilePage(),
+              builder: (context) => EditProfilePage(currentUser: user,),
             );
             break;
         }
