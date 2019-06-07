@@ -26,8 +26,8 @@ class BaseAuth {
 
   /// returns true if logged in
   Future<bool> isLoggedIn() async {
-    FirebaseUser user = await getLoggedInUser();
-    GoogleSignInAccount googleSignInAccount = googleSignIn.currentUser;
+    final FirebaseUser user = await getLoggedInUser();
+    final GoogleSignInAccount googleSignInAccount = googleSignIn.currentUser;
     debugPrint('google account user is: $googleSignInAccount');
     if(user == null || googleSignInAccount == null ) {
       return false;
@@ -52,9 +52,9 @@ class BaseAuth {
   /// firebase and returns firebase user
   Future<FirebaseUser> handleGoogleSignIn() async {
 
-    GoogleSignInAccount googleUser = await googleSignIn.signIn();
+    final GoogleSignInAccount googleUser = await googleSignIn.signIn();
     // debugPrint('got google user ${googleUser.email}');
-    GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
     debugPrint('google user is: ${googleSignIn.currentUser}');
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
@@ -62,7 +62,7 @@ class BaseAuth {
       idToken: googleAuth.idToken,
     );
 
-    FirebaseUser firebaseUser = await firebaseAuth.signInWithCredential(credential);
+    final FirebaseUser firebaseUser = await firebaseAuth.signInWithCredential(credential);
 
     return firebaseUser;
   }
@@ -70,9 +70,9 @@ class BaseAuth {
 
   /// sends email verification to mail
   Future<void> sendEmailVerification() async {
-    bool userStatus = await isLoggedIn();
+    final bool userStatus = await isLoggedIn();
     if(userStatus) {
-      FirebaseUser firebaseUser = await firebaseAuth.currentUser();
+      final FirebaseUser firebaseUser = await firebaseAuth.currentUser();
       if(firebaseUser.isEmailVerified) {
         debugPrint('User ${firebaseUser.email} email has been verified already'); 
         return;
@@ -88,13 +88,28 @@ class BaseAuth {
   /// returns true if email is verified 
   /// and null if no user is logged in
   Future<bool> isEmailVerified() async {
-    bool userStatus = await isLoggedIn();
+    final bool userStatus = await isLoggedIn();
     if(userStatus) {
-      FirebaseUser firebaseUser = await firebaseAuth.currentUser();
-      bool emailVerificationStatus = firebaseUser.isEmailVerified;
+      final FirebaseUser firebaseUser = await firebaseAuth.currentUser();
+      final bool emailVerificationStatus = firebaseUser.isEmailVerified;
       return emailVerificationStatus;
     }
     debugPrint('No User has been logged in');
     return null;
   } 
+
+  /// returns the previously signed google user if not logged out
+  /// in the previous session 
+  Future<FirebaseUser> handleSignInsilently() async {
+    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signInSilently();
+    final GoogleSignInAuthentication googleAuth = await googleSignInAccount.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      idToken: googleAuth.idToken,
+      accessToken: googleAuth.accessToken,
+    );
+
+    final FirebaseUser firebaseUser = await firebaseAuth.signInWithCredential(credential);
+    return firebaseUser;
+  }
 }

@@ -27,7 +27,10 @@ class SecureStorage {
   /// list of securestorageitems
   Future<Map<String,String>> getAllValues() async {
     final all = await flutterSecureStorage.readAll();
-    debugPrint('all local storage values are: $all');
+    // debugPrint('all local storage values are: $all');
+    if(all.length == 0) {
+      return null;
+    }
     return all;
   }
 
@@ -44,13 +47,13 @@ class SecureStorage {
 
   Future<void> addData({@required FirebaseUser firebaseUser}) async {
     // gets the document using document id
-    DocumentSnapshot doc = await firestoreCRUD.getDocumentById(firebaseUser.uid);
+    final DocumentSnapshot doc = await firestoreCRUD.getDocumentById(firebaseUser.uid);
     doc.data.forEach((key, value) async { return await SecureStorage()._addItem(key: key, value: value); });
   }
 
   /// returns a securestorageitem with given key
   Future<String> readItemWithKey({@required String key}) async {
-    String value = await flutterSecureStorage.read(key: key);
+    final String value = await flutterSecureStorage.read(key: key);
     return value;
   }
 }

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-
 import 'package:real_time_messaging/services/authentication.dart';
 import 'package:real_time_messaging/services/firestoreCRUD.dart';
 import 'package:real_time_messaging/services/secureStorageCRUD.dart';
@@ -60,7 +59,15 @@ class _LoginState extends State<LoginPage> {
     setState(() {
      _isLoading = true; 
     });
+
     _currentUser = await SecureStorage().getAllValues();
+    if(_currentUser != null) {
+      final FirebaseUser firebaseUser = await BaseAuth().handleSignInsilently();
+      final bool _isFirstTime = await saveToFirestore(firebaseUser);
+      if(_isFirstTime) {
+        await updateLocalStorage(firebaseUser);
+      }
+    }
     final bool userstatus = await BaseAuth().isLoggedIn();
 
     if(userstatus) {
