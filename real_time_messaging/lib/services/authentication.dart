@@ -101,7 +101,10 @@ class BaseAuth {
   /// returns the previously signed google user if not logged out
   /// in the previous session 
   Future<FirebaseUser> handleSignInsilently() async {
-    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signInSilently();
+    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signInSilently(suppressErrors: true);
+    if(googleSignInAccount == null) {
+      return null;
+    }
     final GoogleSignInAuthentication googleAuth = await googleSignInAccount.authentication;
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(

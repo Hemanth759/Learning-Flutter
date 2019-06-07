@@ -63,8 +63,8 @@ class _LoginState extends State<LoginPage> {
     _currentUser = await SecureStorage().getAllValues();
     if(_currentUser != null) {
       final FirebaseUser firebaseUser = await BaseAuth().handleSignInsilently();
-      final bool _isFirstTime = await saveToFirestore(firebaseUser);
-      if(_isFirstTime) {
+      if(firebaseUser != null) {
+        await saveToFirestore(firebaseUser);
         await updateLocalStorage(firebaseUser);
       }
     }
@@ -87,10 +87,8 @@ class _LoginState extends State<LoginPage> {
     });
 
     FirebaseUser firebaseUser = await BaseAuth().handleGoogleSignIn();
-    final bool _isFirstTime = await saveToFirestore(firebaseUser);
-    if(_isFirstTime) {
-      await updateLocalStorage(firebaseUser);
-    }
+    await saveToFirestore(firebaseUser);
+    await updateLocalStorage(firebaseUser);
     navigateToHome();
   }
 
