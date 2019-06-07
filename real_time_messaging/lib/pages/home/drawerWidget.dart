@@ -11,9 +11,15 @@ Widget buildDrawerWidget(Function handleSignout) {
           padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 5),
         ),
         ListTile(
+          title: Text('Edit Profile'),
+          onTap: () {
+            // TODO: implement edit profile here
+          },
+        ),
+        ListTile(
           title: Text('Signout'),
           onTap: handleSignout,
-        )
+        ),
       ],
     ),
   );
