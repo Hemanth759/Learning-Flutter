@@ -8,8 +8,6 @@ import 'package:real_time_messaging/services/authentication.dart';
 import 'package:real_time_messaging/services/firestoreCRUD.dart';
 import 'package:real_time_messaging/services/secureStorageCRUD.dart';
 import 'package:real_time_messaging/services/loader.dart';
-import 'package:real_time_messaging/utils/sizeconfig.dart';
-
 
 class LoginPage extends StatefulWidget {
   @override
@@ -19,7 +17,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginState extends State<LoginPage> {
-
   Map<String, String> _currentUser;
   bool _isLoading;
 
@@ -33,22 +30,24 @@ class _LoginState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       child: Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Text('Login Page'),
-        ),
-      ),
-      body: _isLoading == false ? Container(
-        child: Center(
-          child: RaisedButton(
-            color: Colors.red,
-            child: Text('Sign in with Google'),
-            onPressed: handleSignIn,
+        appBar: AppBar(
+          title: Center(
+            child: Text('Login Page'),
           ),
         ),
-      ) : Loader(),
-    ),
-    onWillPop: showExitAlertDialog,
+        body: _isLoading == false
+            ? Container(
+                child: Center(
+                  child: RaisedButton(
+                    color: Colors.red,
+                    child: Text('Sign in with Google'),
+                    onPressed: handleSignIn,
+                  ),
+                ),
+              )
+            : Loader(),
+      ),
+      onWillPop: showExitAlertDialog,
     );
   }
 
@@ -101,8 +100,9 @@ class _LoginState extends State<LoginPage> {
               ),
               Text(
                 'CANCEL',
-                style:
-                    TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.bold),
               )
             ],
           ),
@@ -119,13 +119,11 @@ class _LoginState extends State<LoginPage> {
                 ),
                 margin: EdgeInsets.only(right: 10.0),
               ),
-              Text(
-                'Yes',
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontWeight: FontWeight.bold,
-                )
-              )
+              Text('Yes',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ))
             ],
           ),
           onPressed: () {
@@ -140,8 +138,8 @@ class _LoginState extends State<LoginPage> {
         builder: (BuildContext context) {
           return simpleDialog;
         });
-    
-    if(_shouldExit) {
+
+    if (_shouldExit) {
       exit(0);
     }
     return false;
@@ -149,50 +147,65 @@ class _LoginState extends State<LoginPage> {
 
   /// redirects to home page
   void navigateToHome() {
-    Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false, arguments: _currentUser);
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        '/home', (Route<dynamic> route) => false,
+        arguments: _currentUser);
     return;
   }
 
-  /// verifies user login information and redirects to 
+  /// verifies user login information and redirects to
   /// home page if user is logged in
   Future<void> verifyUserStatus() async {
     setState(() {
-     _isLoading = true; 
+      _isLoading = true;
     });
 
-    _currentUser = await SecureStorage().getAllValues();
-    if(_currentUser != null) {
-      final FirebaseUser firebaseUser = await BaseAuth().handleSignInsilently();
-      if(firebaseUser != null) {
-        await saveToFirestore(firebaseUser);
-        await updateLocalStorage(firebaseUser);
+    try {
+      _currentUser = await SecureStorage().getAllValues();
+      if (_currentUser != null) {
+        final FirebaseUser firebaseUser =
+            await BaseAuth().handleSignInsilently();
+        if (firebaseUser != null) {
+          await saveToFirestore(firebaseUser);
+          await updateLocalStorage(firebaseUser);
+        }
       }
-    }
-    final bool userstatus = await BaseAuth().isLoggedIn();
+      final bool userstatus = await BaseAuth().isLoggedIn();
 
-    if(userstatus) {
-      navigateToHome();
+      if (userstatus) {
+        navigateToHome();
+      }
+    } catch (e) {
+      debugPrint('Encountered a error: $e');
     }
 
     setState(() {
-     _isLoading = false; 
+      _isLoading = false;
     });
   }
-
-  
 
   Future<void> handleSignIn() async {
     setState(() {
-     _isLoading = true; 
+      _isLoading = true;
     });
 
-    final FirebaseUser firebaseUser = await BaseAuth().handleGoogleSignIn();
-    await saveToFirestore(firebaseUser);
-    await updateLocalStorage(firebaseUser);
-    navigateToHome();
+    try {
+      final FirebaseUser firebaseUser = await BaseAuth().handleGoogleSignIn();
+      await saveToFirestore(firebaseUser);
+      await updateLocalStorage(firebaseUser);
+      navigateToHome();
+    } catch (e) {
+      debugPrint('Encountered a error while logging in\n trying again after signing out of'
+                'any previous user');
+      await BaseAuth().signOut();
+      final FirebaseUser firebaseUser = await BaseAuth().handleGoogleSignIn();
+      await saveToFirestore(firebaseUser);
+      await updateLocalStorage(firebaseUser);
+      navigateToHome();
+    }
   }
 
-  /// saves to firestore if user is first time user 
+  /// saves to firestore if user is first time user
   /// and returns true or false if not a first time user
   Future<bool> saveToFirestore(FirebaseUser user) async {
     final bool _isFirstTime = await FireStoreCRUD().checkAndSave(user);

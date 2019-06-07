@@ -102,6 +102,7 @@ class BaseAuth {
   /// in the previous session 
   Future<FirebaseUser> handleSignInsilently() async {
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signInSilently(suppressErrors: true);
+    debugPrint('Google user account is: ${googleSignInAccount.email}');
     if(googleSignInAccount == null) {
       return null;
     }

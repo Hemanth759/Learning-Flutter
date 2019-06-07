@@ -8,7 +8,7 @@ import 'package:real_time_messaging/services/secureStorageCRUD.dart';
 import 'package:real_time_messaging/utils/sizeconfig.dart';
 import 'package:real_time_messaging/services/loader.dart';
 
-import 'package:real_time_messaging/pages/home/drawerWidget.dart';
+import 'package:real_time_messaging/pages/home/widgets.dart';
 
 class HomePage extends StatefulWidget {
   final Map<String, String> currentUser;
@@ -58,7 +58,10 @@ class _HomeState extends State<HomePage> {
             title: Text('Home Page'),
             centerTitle: true,
           ),
-          drawer: buildDrawerWidget(_handleSignOut),
+          drawer: buildDrawerWidget(
+            context: context,
+            handleSignout: _handleSignOut,
+          ),
           body: _isLoading == false
               ? Container(
                   child: Center(
