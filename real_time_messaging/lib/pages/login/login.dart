@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,8 @@ class _LoginState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      child: Scaffold(
       appBar: AppBar(
         title: Center(
           child: Text('Login Page'),
@@ -44,7 +46,104 @@ class _LoginState extends State<LoginPage> {
           ),
         ),
       ) : Loader(),
+    ),
+    onWillPop: showExitAlertDialog,
     );
+  }
+
+  /// show alert dialogue when exiting the app
+  Future<bool> showExitAlertDialog() async {
+    SimpleDialog simpleDialog = SimpleDialog(
+      contentPadding: EdgeInsets.all(0.0),
+      children: <Widget>[
+        Container(
+          color: Theme.of(context).primaryColor,
+          margin: EdgeInsets.all(0.0),
+          padding: EdgeInsets.only(bottom: 10, top: 10),
+          height: 100.0,
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: Icon(
+                  Icons.exit_to_app,
+                  size: 30.0,
+                  color: Colors.white,
+                ),
+              ),
+              Text(
+                'Exit App',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                'Are you sure to exit app?',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 14.0,
+                ),
+              )
+            ],
+          ),
+        ),
+        SimpleDialogOption(
+          child: Row(
+            children: <Widget>[
+              Container(
+                child: Icon(
+                  Icons.cancel,
+                  color: Colors.white,
+                ),
+                margin: EdgeInsets.only(right: 10.0),
+              ),
+              Text(
+                'CANCEL',
+                style:
+                    TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
+              )
+            ],
+          ),
+          onPressed: () {
+            Navigator.pop(context, false);
+          },
+        ),
+        SimpleDialogOption(
+          child: Row(
+            children: <Widget>[
+              Container(
+                child: Icon(
+                  Icons.check_circle,
+                ),
+                margin: EdgeInsets.only(right: 10.0),
+              ),
+              Text(
+                'Yes',
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontWeight: FontWeight.bold,
+                )
+              )
+            ],
+          ),
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
+        )
+      ],
+    );
+
+    final bool _shouldExit = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return simpleDialog;
+        });
+    
+    if(_shouldExit) {
+      exit(0);
+    }
+    return false;
   }
 
   /// redirects to home page
@@ -86,7 +185,7 @@ class _LoginState extends State<LoginPage> {
      _isLoading = true; 
     });
 
-    FirebaseUser firebaseUser = await BaseAuth().handleGoogleSignIn();
+    final FirebaseUser firebaseUser = await BaseAuth().handleGoogleSignIn();
     await saveToFirestore(firebaseUser);
     await updateLocalStorage(firebaseUser);
     navigateToHome();
