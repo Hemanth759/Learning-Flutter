@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:real_time_messaging/pages/home/homePage.dart';
 import 'package:real_time_messaging/pages/login/login.dart';
 import 'package:real_time_messaging/pages/editProfile/editprofile.dart';
+import 'package:real_time_messaging/pages/chats/chat.dart';
 import 'package:real_time_messaging/pages/notFoundPage.dart';
 
 void main() {
@@ -25,7 +26,7 @@ class MainApp extends StatelessWidget {
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
           case '/home':
-            Map<String, String> currentUser = settings.arguments;
+            final Map<String, String> currentUser = settings.arguments;
             return MaterialPageRoute(
               builder: (context) => HomePage(currentUser: currentUser,),
             );
@@ -36,11 +37,21 @@ class MainApp extends StatelessWidget {
             );
             break;
           case '/editProfile':
-            Map<String,String> user = settings.arguments;
+            final Map<String, String> user = settings.arguments;
             return MaterialPageRoute(
               builder: (context) => EditProfilePage(currentUser: user,),
             );
             break;
+          case '/chat':
+            final Map<String, dynamic> args = settings.arguments;
+            final Map<String, String> user = args['user'];
+            final String frdId = args['friendId'];
+            return MaterialPageRoute(
+              builder: (context) => ChatPage(
+                currentUser: user,
+                friendId: frdId,
+              ),
+            );
         }
       },
       onUnknownRoute: (RouteSettings settings) {
