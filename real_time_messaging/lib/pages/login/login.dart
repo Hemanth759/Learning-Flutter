@@ -214,7 +214,7 @@ class _LoginState extends State<LoginPage> {
 
   /// updates the local shared variables
   Future<void> updateLocalStorage(FirebaseUser user) async {
-    await SecureStorage().addData(firebaseUser: user);
+    await SecureStorage().addData(userId: user.uid);
     _currentUser = await SecureStorage().getAllValues();
   }
 }

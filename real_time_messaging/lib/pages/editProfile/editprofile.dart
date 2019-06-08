@@ -7,6 +7,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:real_time_messaging/services/loader.dart';
 import 'package:real_time_messaging/models/user.dart';
 import 'package:real_time_messaging/services/firestoreCRUD.dart';
+import 'package:real_time_messaging/services/secureStorageCRUD.dart';
+import 'package:real_time_messaging/services/storageIO.dart';
 
 import 'package:real_time_messaging/utils/sizeconfig.dart';
 
@@ -198,16 +200,27 @@ class _EditState extends State<EditProfilePage> {
   /// triggers the update image method
   Future<void> _updateImg() async {
     final File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    debugPrint('image is: ${image.path}');
     if(image != null) {
       setState(() {
        _isLoading = true;
        avaterImage = image;
       });
 
-      // TODO: update image in storage in firebase
+      final String downloadUri = await StorageIO().uploadImage(userId: userId, imageFile: image);
+      final User user = User(
+        userId: userId,
+        aboutMe: aboutMe,
+        imgLoc: downloadUri,
+        name: name,
+      );
       
+      imgLoc = downloadUri;
+      await FireStoreCRUD().updateUserInfo(user);
+      await SecureStorage().addData(userId: userId);
+
       setState(() {
-       _isLoading = false; 
+       _isLoading = false;
       });
     }
   }
@@ -237,7 +250,9 @@ class _EditState extends State<EditProfilePage> {
         userId: userId,
       );
 
+      // to update the firestore and local storage
       await FireStoreCRUD().updateUserInfo(user);
+      await SecureStorage().addData(userId: userId);
     }
 
     setState(() {

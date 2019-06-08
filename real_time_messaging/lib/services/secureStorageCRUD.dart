@@ -45,9 +45,9 @@ class SecureStorage {
     return;
   }
 
-  Future<void> addData({@required FirebaseUser firebaseUser}) async {
+  Future<void> addData({@required String userId}) async {
     // gets the document using document id
-    final DocumentSnapshot doc = await firestoreCRUD.getDocumentById(firebaseUser.uid);
+    final DocumentSnapshot doc = await firestoreCRUD.getDocumentById(userId);
     doc.data.forEach((key, value) async { return await SecureStorage()._addItem(key: key, value: value); });
   }
 
