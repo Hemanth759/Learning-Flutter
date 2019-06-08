@@ -1,5 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:real_time_messaging/services/loader.dart';
 import 'package:real_time_messaging/models/user.dart';
@@ -21,6 +24,8 @@ class EditProfilePage extends StatefulWidget {
 class _EditState extends State<EditProfilePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isLoading;
+
+  File avaterImage;
 
   String userId;
   String imgLoc;
@@ -68,7 +73,7 @@ class _EditState extends State<EditProfilePage> {
                           height: SizeConfig.blockSizeVertical * 20,
                           width: SizeConfig.blockSizeHorizontal * 40,
                           child: Stack(
-                            fit: StackFit.passthrough,
+                            fit: StackFit.loose,
                             alignment: Alignment.center,
                             children: <Widget>[
                               Container(
@@ -83,6 +88,22 @@ class _EditState extends State<EditProfilePage> {
                                       Radius.circular(
                                           SizeConfig.blockSizeHorizontal * 30)),
                                   clipBehavior: Clip.hardEdge,
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  top: SizeConfig.blockSizeVertical * 15,
+                                  left: SizeConfig.blockSizeHorizontal * 32
+                                ),
+                                child: Container(
+                                  child: IconButton(
+                                    alignment: Alignment.center,
+                                    icon: Icon(
+                                      Icons.camera_enhance,
+                                      size: SizeConfig.blockSizeHorizontal * 8,
+                                    ),
+                                    onPressed: _updateImg,
+                                  ),
                                 ),
                               ),
                             ],
@@ -174,6 +195,25 @@ class _EditState extends State<EditProfilePage> {
     );
   }
 
+  /// triggers the update image method
+  Future<void> _updateImg() async {
+    final File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    if(image != null) {
+      setState(() {
+       _isLoading = true;
+       avaterImage = image;
+      });
+
+      // TODO: update image in storage in firebase
+      
+      setState(() {
+       _isLoading = false; 
+      });
+    }
+  }
+
+  /// validates the form and returns true if 
+  /// the form is valid
   bool _validateAndSave() {
     final FormState formState = _formKey.currentState;
     if (formState.validate()) {
