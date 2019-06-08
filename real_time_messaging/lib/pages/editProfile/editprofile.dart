@@ -2,8 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:real_time_messaging/services/loader.dart';
+import 'package:real_time_messaging/models/user.dart';
+import 'package:real_time_messaging/services/firestoreCRUD.dart';
 
-import 'package:real_time_messaging/pages/editProfile/widgets.dart';
 import 'package:real_time_messaging/utils/sizeconfig.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -159,9 +160,7 @@ class _EditState extends State<EditProfilePage> {
                         Container(
                           child: RaisedButton(
                             child: Text('Update'),
-                            onPressed: () {
-                              // TODO: implement the update function
-                            },
+                            onPressed: _updateUser,
                           ),
                         ),
 
@@ -173,6 +172,37 @@ class _EditState extends State<EditProfilePage> {
                   ))),
       onWillPop: goBack,
     );
+  }
+
+  bool _validateAndSave() {
+    final FormState formState = _formKey.currentState;
+    if (formState.validate()) {
+      formState.save();
+      return true;
+    }
+    return false;
+  }
+
+  /// updates the user info to firestore database
+  Future<void> _updateUser() async {
+    setState(() {
+     _isLoading = true; 
+    });
+
+    if(_validateAndSave()) {
+      final User user = User(
+        name: name,
+        aboutMe: aboutMe,
+        imgLoc: imgLoc,
+        userId: userId,
+      );
+
+      await FireStoreCRUD().updateUserInfo(user);
+    }
+
+    setState(() {
+     _isLoading = false; 
+    });
   }
 
   /// returns to previous page

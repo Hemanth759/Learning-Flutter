@@ -31,6 +31,12 @@ class FireStoreCRUD {
     return false;
   }
 
+  /// function to update user info in firestore
+  /// with the given user info
+  Future<void> updateUserInfo(User user) async {
+    await _database.collection('Users').document(user.userId).setData(user.toMap());
+  }
+
   Future<DocumentSnapshot> getDocumentById(String documentId) async {
     final DocumentSnapshot documentSnapshot = await _database.collection('Users').document(documentId).get();
     if(documentSnapshot.exists) {
