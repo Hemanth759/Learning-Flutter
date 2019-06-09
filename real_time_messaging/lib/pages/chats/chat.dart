@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+
+import 'package:real_time_messaging/models/user.dart';
 import 'package:real_time_messaging/services/loader.dart';
 
 class ChatPage extends StatefulWidget {
   ChatPage({@required this.currentUser, @required this.friendUser});
 
   final Map<String, String> currentUser;
-  final Map<String, String> friendUser;
+  final User friendUser;
 
   @override
   State<StatefulWidget> createState() {
@@ -23,7 +25,7 @@ class _ChatState extends State<ChatPage> {
       _isLoading = true;
     });
 
-    friendName = widget.friendUser['name'];
+    friendName = widget.friendUser.name;
 
     setState(() {
       _isLoading = false;

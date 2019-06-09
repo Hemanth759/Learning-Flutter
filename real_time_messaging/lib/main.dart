@@ -6,6 +6,8 @@ import 'package:real_time_messaging/pages/editProfile/editprofile.dart';
 import 'package:real_time_messaging/pages/chats/chat.dart';
 import 'package:real_time_messaging/pages/notFoundPage.dart';
 
+import 'package:real_time_messaging/models/user.dart';
+
 void main() {
   runApp(MainApp());
 }
@@ -48,7 +50,8 @@ class MainApp extends StatelessWidget {
           case '/chat':
             final Map<String, dynamic> args = settings.arguments;
             final Map<String, String> user = args['user'];
-            final Map<String, String> frdUser = args['friendUser'];
+            final User frdUser = args['friendUser'];
+            debugPrint('current user is: ${user['name']} and friend user is : ${frdUser.name}');
             return MaterialPageRoute(
               builder: (context) => ChatPage(
                     currentUser: user,

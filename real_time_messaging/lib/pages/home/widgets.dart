@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/painting.dart';
 
 import 'package:real_time_messaging/models/user.dart';
 import 'package:real_time_messaging/services/loader.dart';
@@ -36,14 +37,12 @@ Widget buildDrawerWidget(
 /// builds the listtile for the user
 Widget _buildChatView({@required User user, @required Function goToChatPage}) {
   return ListTile(
-    leading: Material(
-        child: SizedBox(
-          child: CachedNetworkImage(
-            imageUrl: user.imgLoc,
-            alignment: Alignment.center,
-            placeholder: (context, _) => Loader(),
-          ),
-        )
+    leading: CircleAvatar(
+      child: CachedNetworkImage(
+        imageUrl: user.imgLoc,
+        alignment: Alignment.center,
+        placeholder: (context, _) => Loader(),
+      ),
     ),
     title: Text(
       user.name,
@@ -53,7 +52,9 @@ Widget _buildChatView({@required User user, @required Function goToChatPage}) {
       ),
     ),
     onTap: () {
-      goToChatPage();
+      goToChatPage(
+        user: user,
+      );
     },
   );
 }
