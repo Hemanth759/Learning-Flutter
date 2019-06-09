@@ -63,8 +63,8 @@ class FireStoreCRUD {
       {String collectionName: 'Users',
       int limit,
       String orderBy,
-      DocumentSnapshot afterDocument}) async {
-    if (afterDocument == null) {
+      String afterDocumentID}) async {
+    if (afterDocumentID == null) {
       if (limit == null && orderBy == null) {
         // gets all the users
         final QuerySnapshot querySnapshot =
@@ -126,11 +126,14 @@ class FireStoreCRUD {
     // if afterdocument is not given
 
     else {
+
+      final DocumentSnapshot lastSnap = await _database.collection(collectionName).document(afterDocumentID).get();
+
       if (limit == null && orderBy == null) {
         // gets all the users
         final QuerySnapshot querySnapshot = await _database
             .collection(collectionName)
-            .startAfterDocument(afterDocument)
+            .startAfterDocument(lastSnap)
             .getDocuments();
         final List<User> users = List<User>();
         for (DocumentSnapshot snap in querySnapshot.documents) {
@@ -145,7 +148,7 @@ class FireStoreCRUD {
         final QuerySnapshot querySnapshot = await _database
             .collection(collectionName)
             .orderBy(orderBy)
-            .startAfterDocument(afterDocument)
+            .startAfterDocument(lastSnap)
             .getDocuments();
         final List<User> users = List<User>();
         for (DocumentSnapshot snap in querySnapshot.documents) {
@@ -165,7 +168,7 @@ class FireStoreCRUD {
         final QuerySnapshot querySnapshot = await _database
             .collection(collectionName)
             .limit(limit)
-            .startAfterDocument(afterDocument)
+            .startAfterDocument(lastSnap)
             .getDocuments();
         final List<User> users = List<User>();
         for (DocumentSnapshot snap in querySnapshot.documents) {
@@ -178,7 +181,7 @@ class FireStoreCRUD {
             .collection(collectionName)
             .orderBy(orderBy)
             .limit(limit)
-            .startAfterDocument(afterDocument)
+            .startAfterDocument(lastSnap)
             .getDocuments();
         final List<User> users = List<User>();
         for (DocumentSnapshot snap in querySnapshot.documents) {
