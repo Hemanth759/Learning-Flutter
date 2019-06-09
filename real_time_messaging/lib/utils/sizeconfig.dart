@@ -9,7 +9,7 @@ class SizeConfig {
   static double blockSizeHorizontal;
   static double blockSizeVertical;
 
-  void init (BuildContext context) {
+  void init(BuildContext context) {
     _mediaQueryData = MediaQuery.of(context);
     screenWidth = _mediaQueryData.size.width;
     screenHeight = _mediaQueryData.size.height;
@@ -20,7 +20,7 @@ class SizeConfig {
   SizeConfig._createInstance();
 
   factory SizeConfig() {
-    if(_sizeConfig == null) {
+    if (_sizeConfig == null) {
       _sizeConfig = SizeConfig._createInstance();
     }
     return _sizeConfig;

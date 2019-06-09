@@ -11,7 +11,6 @@ void main() {
 }
 
 class MainApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,7 +27,9 @@ class MainApp extends StatelessWidget {
           case '/home':
             final Map<String, String> currentUser = settings.arguments;
             return MaterialPageRoute(
-              builder: (context) => HomePage(currentUser: currentUser,),
+              builder: (context) => HomePage(
+                    currentUser: currentUser,
+                  ),
             );
             break;
           case '/':
@@ -39,7 +40,9 @@ class MainApp extends StatelessWidget {
           case '/editProfile':
             final Map<String, String> user = settings.arguments;
             return MaterialPageRoute(
-              builder: (context) => EditProfilePage(currentUser: user,),
+              builder: (context) => EditProfilePage(
+                    currentUser: user,
+                  ),
             );
             break;
           case '/chat':
@@ -48,9 +51,9 @@ class MainApp extends StatelessWidget {
             final String frdId = args['friendId'];
             return MaterialPageRoute(
               builder: (context) => ChatPage(
-                currentUser: user,
-                friendId: frdId,
-              ),
+                    currentUser: user,
+                    friendId: frdId,
+                  ),
             );
         }
       },

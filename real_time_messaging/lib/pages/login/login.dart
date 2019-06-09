@@ -195,8 +195,9 @@ class _LoginState extends State<LoginPage> {
       await updateLocalStorage(firebaseUser);
       navigateToHome();
     } catch (e) {
-      debugPrint('Encountered a error while logging in\n trying again after signing out of'
-                'any previous user');
+      debugPrint(
+          'Encountered a error while logging in\n trying again after signing out of'
+          'any previous user');
       await BaseAuth().signOut();
       final FirebaseUser firebaseUser = await BaseAuth().handleGoogleSignIn();
       await saveToFirestore(firebaseUser);

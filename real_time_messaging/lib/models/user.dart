@@ -14,9 +14,9 @@ class User {
   String get aboutMe => this._aboutMe;
 
   // setters for varaibles
-  set imgLoc (String value) => this._imgLoc = value;
-  set name (String value) => this._name = value;
-  set aboutMe (String value) => this._aboutMe = value;
+  set imgLoc(String value) => this._imgLoc = value;
+  set name(String value) => this._name = value;
+  set aboutMe(String value) => this._aboutMe = value;
 
   // basic constructor
   User({String name, String imgLoc, String userId, String aboutMe}) {
@@ -35,7 +35,7 @@ class User {
 
   /// returns map of user object
   Map<String, dynamic> toMap() {
-    Map<String,dynamic> map = Map<String,dynamic>();
+    Map<String, dynamic> map = Map<String, dynamic>();
     map['userId'] = this.userId;
     map['imgLoc'] = this.imgLoc;
     map['name'] = this.name;

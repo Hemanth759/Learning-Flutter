@@ -133,8 +133,9 @@ class _HomeState extends State<HomePage> {
               ),
               Text(
                 'CANCEL',
-                style:
-                    TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.bold),
               )
             ],
           ),
@@ -151,13 +152,11 @@ class _HomeState extends State<HomePage> {
                 ),
                 margin: EdgeInsets.only(right: 10.0),
               ),
-              Text(
-                'Yes',
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontWeight: FontWeight.bold,
-                )
-              )
+              Text('Yes',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ))
             ],
           ),
           onPressed: () {
@@ -172,8 +171,8 @@ class _HomeState extends State<HomePage> {
         builder: (BuildContext context) {
           return simpleDialog;
         });
-    
-    if(_shouldExit) {
+
+    if (_shouldExit) {
       exit(0);
     }
     return false;

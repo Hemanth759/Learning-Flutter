@@ -56,7 +56,7 @@ class _EditState extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       child: Scaffold(
-        resizeToAvoidBottomPadding: false,
+          resizeToAvoidBottomPadding: false,
           appBar: AppBar(
             centerTitle: true,
             title: Text('Edit Profile'),
@@ -94,9 +94,8 @@ class _EditState extends State<EditProfilePage> {
                               ),
                               Padding(
                                 padding: EdgeInsets.only(
-                                  top: SizeConfig.blockSizeVertical * 15,
-                                  left: SizeConfig.blockSizeHorizontal * 32
-                                ),
+                                    top: SizeConfig.blockSizeVertical * 15,
+                                    left: SizeConfig.blockSizeHorizontal * 32),
                                 child: Container(
                                   child: IconButton(
                                     alignment: Alignment.center,
@@ -141,15 +140,15 @@ class _EditState extends State<EditProfilePage> {
                                         labelText: 'Display name',
                                         hintText: 'Your name for example',
                                         focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide.none
-                                        ),
+                                            borderSide: BorderSide.none),
                                       ),
                                     ),
                                   ),
 
                                   // about me
                                   Container(
-                                    padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 5),
+                                    padding: EdgeInsets.only(
+                                        top: SizeConfig.blockSizeVertical * 5),
                                     width: SizeConfig.blockSizeHorizontal * 75,
                                     child: TextFormField(
                                       keyboardType: TextInputType.multiline,
@@ -164,10 +163,10 @@ class _EditState extends State<EditProfilePage> {
                                       },
                                       decoration: InputDecoration(
                                         labelText: 'About Me',
-                                        hintText: 'Describe yourself in few lines',
+                                        hintText:
+                                            'Describe yourself in few lines',
                                         focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide.none
-                                        ),
+                                            borderSide: BorderSide.none),
                                       ),
                                     ),
                                   )
@@ -201,31 +200,32 @@ class _EditState extends State<EditProfilePage> {
   Future<void> _updateImg() async {
     final File image = await ImagePicker.pickImage(source: ImageSource.gallery);
     debugPrint('image is: ${image.path}');
-    if(image != null) {
+    if (image != null) {
       setState(() {
-       _isLoading = true;
-       avaterImage = image;
+        _isLoading = true;
+        avaterImage = image;
       });
 
-      final String downloadUri = await StorageIO().uploadImage(userId: userId, imageFile: image);
+      final String downloadUri =
+          await StorageIO().uploadImage(userId: userId, imageFile: image);
       final User user = User(
         userId: userId,
         aboutMe: aboutMe,
         imgLoc: downloadUri,
         name: name,
       );
-      
+
       imgLoc = downloadUri;
       await FireStoreCRUD().updateUserInfo(user);
       await SecureStorage().addData(userId: userId);
 
       setState(() {
-       _isLoading = false;
+        _isLoading = false;
       });
     }
   }
 
-  /// validates the form and returns true if 
+  /// validates the form and returns true if
   /// the form is valid
   bool _validateAndSave() {
     final FormState formState = _formKey.currentState;
@@ -239,10 +239,10 @@ class _EditState extends State<EditProfilePage> {
   /// updates the user info to firestore database
   Future<void> _updateUser() async {
     setState(() {
-     _isLoading = true; 
+      _isLoading = true;
     });
 
-    if(_validateAndSave()) {
+    if (_validateAndSave()) {
       final User user = User(
         name: name,
         aboutMe: aboutMe,
@@ -256,7 +256,7 @@ class _EditState extends State<EditProfilePage> {
     }
 
     setState(() {
-     _isLoading = false; 
+      _isLoading = false;
     });
   }
 

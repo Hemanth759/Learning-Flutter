@@ -28,3 +28,7 @@ Widget buildDrawerWidget(
     ),
   );
 }
+
+Widget buildChatList() {
+  return ListView();
+}

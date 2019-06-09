@@ -13,7 +13,7 @@ class SecureStorage {
   SecureStorage._createInstance();
 
   factory SecureStorage() {
-    if(_secureStorage == null) {
+    if (_secureStorage == null) {
       _secureStorage = SecureStorage._createInstance();
     }
     return _secureStorage;
@@ -23,12 +23,12 @@ class SecureStorage {
   FlutterSecureStorage get flutterSecureStorage => _flutterSecureStorage;
   FireStoreCRUD get firestoreCRUD => _fireStoreCRUD;
 
-  /// returns all the securely stored values as 
+  /// returns all the securely stored values as
   /// list of securestorageitems
-  Future<Map<String,String>> getAllValues() async {
+  Future<Map<String, String>> getAllValues() async {
     final all = await flutterSecureStorage.readAll();
     // debugPrint('all local storage values are: $all');
-    if(all.length == 0) {
+    if (all.length == 0) {
       return null;
     }
     return all;
@@ -48,7 +48,9 @@ class SecureStorage {
   Future<void> addData({@required String userId}) async {
     // gets the document using document id
     final DocumentSnapshot doc = await firestoreCRUD.getDocumentById(userId);
-    doc.data.forEach((key, value) async { return await SecureStorage()._addItem(key: key, value: value); });
+    doc.data.forEach((key, value) async {
+      return await SecureStorage()._addItem(key: key, value: value);
+    });
   }
 
   /// returns a securestorageitem with given key
