@@ -8,7 +8,7 @@ import 'package:real_time_messaging/pages/notFoundPage.dart';
 
 import 'package:real_time_messaging/models/user.dart';
 
-void main() {asdf
+void main() {
   runApp(MainApp());
 }
 
