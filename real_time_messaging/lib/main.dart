@@ -48,11 +48,11 @@ class MainApp extends StatelessWidget {
           case '/chat':
             final Map<String, dynamic> args = settings.arguments;
             final Map<String, String> user = args['user'];
-            final String frdId = args['friendId'];
+            final Map<String, String> frdUser = args['friendUser'];
             return MaterialPageRoute(
               builder: (context) => ChatPage(
                     currentUser: user,
-                    friendId: frdId,
+                    friendUser: frdUser,
                   ),
             );
         }

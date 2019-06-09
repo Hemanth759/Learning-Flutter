@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
+import 'package:real_time_messaging/models/user.dart';
+import 'package:real_time_messaging/services/loader.dart';
 
 import 'package:real_time_messaging/utils/sizeconfig.dart';
 
@@ -29,6 +33,44 @@ Widget buildDrawerWidget(
   );
 }
 
-Widget buildChatList() {
-  return ListView();
+/// builds the listtile for the user
+Widget _buildChatView({@required User user, @required Function goToChatPage}) {
+  return ListTile(
+    leading: Material(
+        child: SizedBox(
+          child: CachedNetworkImage(
+            imageUrl: user.imgLoc,
+            alignment: Alignment.center,
+            placeholder: (context, _) => Loader(),
+          ),
+        )
+    ),
+    title: Text(
+      user.name,
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: Colors.blue,
+      ),
+    ),
+    onTap: () {
+      goToChatPage();
+    },
+  );
+}
+
+// builds the entire user chat list
+Widget buildChatList(
+    {@required List<User> userList,
+    @required Function goToChatPage,
+    @required ScrollController scrollController}) {
+  return ListView.builder(
+    itemCount: userList.length,
+    controller: scrollController,
+    itemBuilder: (context, index) {
+      return _buildChatView(
+        user: userList[index],
+        goToChatPage: goToChatPage,
+      );
+    },
+  );
 }

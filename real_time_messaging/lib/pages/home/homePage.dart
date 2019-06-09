@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:real_time_messaging/models/user.dart';
 
 import 'package:real_time_messaging/services/authentication.dart';
+import 'package:real_time_messaging/services/firestoreCRUD.dart';
 import 'package:real_time_messaging/services/secureStorageCRUD.dart';
 import 'package:real_time_messaging/utils/sizeconfig.dart';
 import 'package:real_time_messaging/services/loader.dart';
@@ -21,22 +23,49 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomeState extends State<HomePage> {
+  // varaibles
+  final FireStoreCRUD _fireStoreDB = FireStoreCRUD();
+  final ScrollController _controller = ScrollController();
+  List<User> _allUsers = List<User>();
+  bool _moreUsersavailableToLoad = true;
+  bool _isFetchingUsers = false;
+
   bool _isLoading;
 
   @override
   void initState() {
-    setState(() {
-      _isLoading = true;
-    });
-    verifyLoginStatus();
-
-    setState(() {
-      _isLoading = false;
-    });
+    _verifyLoginStatus();
+    _updateUserList();
     super.initState();
   }
 
-  Future<void> verifyLoginStatus() async {
+  Future<void> _updateUserList() async {
+    setState(() {
+      _isLoading = true;
+      _isFetchingUsers = true;
+    });
+
+    final List<User> tempUsers = await _fireStoreDB.getDocuments(
+      limit: 10,
+      orderBy: 'name',
+    );
+    _allUsers = tempUsers;
+    print('users got are: $_allUsers');
+
+    setState(() {
+      _isLoading = false;
+      _isFetchingUsers = false;
+    });
+  }
+
+  /// verifies login status of the user
+  /// and redirects to home login page incase
+  /// the user is not logged in
+  Future<void> _verifyLoginStatus() async {
+    setState(() {
+      _isLoading = true;
+    });
+
     bool loginStatus = await BaseAuth().isLoggedIn();
     if (loginStatus) {
       debugPrint('user has been logged in');
@@ -46,6 +75,10 @@ class _HomeState extends State<HomePage> {
       setState(() {});
       Navigator.of(context).pushReplacementNamed('/');
     }
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -64,13 +97,18 @@ class _HomeState extends State<HomePage> {
             currentUser: widget.currentUser,
           ),
           body: _isLoading == false
-              ? Container(
-                  child: Center(
-                    child: Text('Home Page'),
-                  ),
+              ? buildChatList(
+                  userList: _allUsers,
+                  scrollController: _controller,
+                  goToChatPage: _goToChatPage,
                 )
               : Loader(),
         ));
+  }
+
+  void _goToChatPage({@required User user}) {
+    Navigator.of(context).pushNamed('/chat',
+        arguments: {'friendUser': user, 'user': widget.currentUser});
   }
 
   Future<void> _handleSignOut() async {

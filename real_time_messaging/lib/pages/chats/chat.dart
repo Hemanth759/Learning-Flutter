@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:real_time_messaging/services/loader.dart';
 
 class ChatPage extends StatefulWidget {
-  ChatPage({@required this.currentUser, @required this.friendId});
+  ChatPage({@required this.currentUser, @required this.friendUser});
 
   final Map<String, String> currentUser;
-  final String friendId;
+  final Map<String, String> friendUser;
 
   @override
   State<StatefulWidget> createState() {
@@ -23,7 +23,7 @@ class _ChatState extends State<ChatPage> {
       _isLoading = true;
     });
 
-    // TODO: get the friend user data from firebase
+    friendName = widget.friendUser['name'];
 
     setState(() {
       _isLoading = false;
@@ -42,7 +42,7 @@ class _ChatState extends State<ChatPage> {
         body: _isLoading == true
             ? Loader()
             : Container(
-                child: Text('Chat Box'),
+                child: Text(friendName),
               ),
       ),
       onWillPop: _goBack,
