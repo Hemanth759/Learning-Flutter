@@ -134,6 +134,7 @@ class _HomeState extends State<HomePage> {
           ),
           body: _isLoading == false
               ? buildChatList(
+                  currentUser: User.fromFireStoreCloud(widget.currentUser),
                   userList: _allUsers,
                   scrollController: _controller,
                   goToChatPage: _goToChatPage,

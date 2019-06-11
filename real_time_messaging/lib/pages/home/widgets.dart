@@ -61,14 +61,15 @@ Widget _buildChatView({@required User user, @required Function goToChatPage}) {
 
 /// builds the entire user chat list
 Widget buildChatList(
-    {@required List<User> userList,
+    {@required User currentUser,
+    @required List<User> userList,
     @required Function goToChatPage,
     @required ScrollController scrollController}) {
   return ListView.builder(
     itemCount: userList.length,
     controller: scrollController,
     itemBuilder: (context, index) {
-      return _buildChatView(
+      return  _buildChatView(
         user: userList[index],
         goToChatPage: goToChatPage,
       );
