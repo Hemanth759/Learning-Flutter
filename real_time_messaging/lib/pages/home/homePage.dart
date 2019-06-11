@@ -36,19 +36,45 @@ class _HomeState extends State<HomePage> {
   void initState() {
     _verifyLoginStatus();
     _updateUserList();
+
+    // listener for the controller of scrolling in list view 
+    // to add the user contants when scroller is above 25% of the screen
     _controller.addListener(() {
       // some constants
       final double maxScroll = _controller.position.maxScrollExtent;
       final double currentScroll = _controller.position.pixels;
       final double delta = MediaQuery.of(context).size.height * 0.25;
+      debugPrint('controller position changed');
 
       if (maxScroll - currentScroll >= delta) {
         debugPrint('scroll reached above 25%');
+
+        // if already users are being fetched for the first time
+        if(!_isFetchingUsers) {
+          _isFetchingUsers = true;
+          _getMoreUsers();
+        }
       }
     });
+
     super.initState();
   }
 
+  Future<void> _getMoreUsers() async {
+    if(_moreUsersavailableToLoad) {
+      final List<User> tempUsers = await _fireStoreDB.getDocuments(
+        limit: 10,
+        orderBy: 'name',
+        afterDocumentID: _allUsers[_allUsers.length - 1].userId,
+      );
+
+      setState(() {
+       _allUsers = _allUsers + tempUsers; 
+      });
+    }
+  }
+
+  /// updates the user list to 20 users initailly
   Future<void> _updateUserList() async {
     setState(() {
       _isLoading = true;

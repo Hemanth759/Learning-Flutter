@@ -59,7 +59,7 @@ Widget _buildChatView({@required User user, @required Function goToChatPage}) {
   );
 }
 
-// builds the entire user chat list
+/// builds the entire user chat list
 Widget buildChatList(
     {@required List<User> userList,
     @required Function goToChatPage,
