@@ -69,10 +69,10 @@ Widget buildChatList(
     itemCount: userList.length,
     controller: scrollController,
     itemBuilder: (context, index) {
-      return  _buildChatView(
+      return currentUser.userId != userList[index].userId ? _buildChatView(
         user: userList[index],
         goToChatPage: goToChatPage,
-      );
+      ) : Container();
     },
   );
 }
