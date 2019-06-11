@@ -36,6 +36,16 @@ class _HomeState extends State<HomePage> {
   void initState() {
     _verifyLoginStatus();
     _updateUserList();
+    _controller.addListener(() {
+      // some constants
+      final double maxScroll = _controller.position.maxScrollExtent;
+      final double currentScroll = _controller.position.pixels;
+      final double delta = MediaQuery.of(context).size.height * 0.25;
+
+      if (maxScroll - currentScroll >= delta) {
+        debugPrint('scroll reached above 25%');
+      }
+    });
     super.initState();
   }
 
