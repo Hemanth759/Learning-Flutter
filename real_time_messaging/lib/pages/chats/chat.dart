@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:real_time_messaging/models/user.dart';
 import 'package:real_time_messaging/services/loader.dart';
 
+import 'package:real_time_messaging/pages/chats/widgets.dart';
+
 class ChatPage extends StatefulWidget {
   ChatPage({@required this.currentUser, @required this.friendUser});
 
@@ -17,19 +19,12 @@ class ChatPage extends StatefulWidget {
 
 class _ChatState extends State<ChatPage> {
   bool _isLoading;
-  String friendName;
+  bool _showStickers;
 
   @override
   void initState() {
-    setState(() {
-      _isLoading = true;
-    });
-
-    friendName = widget.friendUser.name;
-
-    setState(() {
-      _isLoading = false;
-    });
+    _isLoading = false;
+    _showStickers = false;
     super.initState();
   }
 
@@ -39,13 +34,19 @@ class _ChatState extends State<ChatPage> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Chat'),
+          title: Text(widget.friendUser.name),
         ),
         body: _isLoading == true
             ? Loader()
-            : Container(
-                child: Text(friendName),
-              ),
+            : Stack(
+              children: <Widget>[
+                // lists all the messages
+                buildChatList(),
+
+                // stickers
+
+              ],
+            )
       ),
       onWillPop: _goBack,
     );
@@ -53,7 +54,21 @@ class _ChatState extends State<ChatPage> {
 
   /// function to go back to previous page
   Future<bool> _goBack() {
-    Navigator.of(context).pop();
+    // if the display is on stickers
+    if(_showStickers) {
+      setState(() {
+       _showStickers = false; 
+      });
+    } else {
+      Navigator.of(context).pop();
+    }
+
     return Future.value(false);
+  }
+
+  /// changes the focus out of keyboard and displays the 
+  /// stickers instead of keyboard
+  void _getStickers() {
+    // TODO: function to toggle stickers and reset the app
   }
 }
