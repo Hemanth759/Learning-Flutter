@@ -10,13 +10,36 @@ Widget buildChatList() {
   );
 }
 
-Widget buildStickers() {
-  // TODO: display stickers
-  return Container();
+Widget buildStickers({@required Function sendFunction}) {
+  return Container(
+    height: SizeConfig.blockSizeVertical * 45.0,
+    width: SizeConfig.blockSizeHorizontal * 100.0,
+    child: Column(
+      children: <Widget>[
+        // first row
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            FlatButton(
+              onPressed: () {
+                // TODO: function for inserting the image to messages
+              },
+              child: Image.asset(
+                'assets/stickers/mimi1.gif',
+                height: SizeConfig.blockSizeVertical * 15.0,
+                width: SizeConfig.blockSizeHorizontal * 33.3,
+                fit: BoxFit.fill,
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
 }
 
 /// builds the layout for the keypad
-Widget buildInputLayout() {
+Widget buildInputLayout({@required FocusNode focusNode,@required Function showStickers, @required Function showKeyboard}) {
   return Container(
     height: SizeConfig.blockSizeVertical * 5,
     width: SizeConfig.blockSizeHorizontal * 100.0,
@@ -42,9 +65,7 @@ Widget buildInputLayout() {
             margin: EdgeInsets.symmetric(horizontal: 1.0),
             child: IconButton(
               icon: Icon(Icons.insert_emoticon),
-              onPressed: () {
-                // TODO: get the stickers to display
-              },
+              onPressed: showStickers,
               color: Colors.amber,
             ),
           ),
@@ -58,6 +79,8 @@ Widget buildInputLayout() {
             // height: 50,
             child: Container(
               child: TextField(
+                onTap: showKeyboard,
+                focusNode: focusNode,
                 style: TextStyle(color: Colors.amber, fontSize: 20.0),
                 decoration: InputDecoration.collapsed(
                   hintText: 'Type a message',

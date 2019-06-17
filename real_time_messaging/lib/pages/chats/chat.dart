@@ -48,22 +48,28 @@ class _ChatState extends State<ChatPage> {
               ? Loader()
               : Stack(
                   children: <Widget>[
+                    // lists all the messages
                     Positioned(
-                      child: Column(
-                        children: <Widget>[
-                          // lists all the messages
-                          buildChatList(),
+                      child: buildChatList(),
+                    ),
 
-                          // stickers
-                          _showStickers ? buildStickers() : Container(),
-                        ],
-                      ),
+                    // stickers
+                    Positioned(
+                      child: _showStickers
+                          ? buildStickers(
+                              sendFunction: _sendSticker,
+                            )
+                          : Container(),
                     ),
 
                     // shows the input layout
                     Positioned(
                       bottom: 5,
-                      child: buildInputLayout(),
+                      child: buildInputLayout(
+                        focusNode: _focusNode,
+                        showStickers: _getStickers,
+                        showKeyboard: _onFocusChange,
+                      ),
                     )
                   ],
                 )),
@@ -96,11 +102,16 @@ class _ChatState extends State<ChatPage> {
 
   /// when focus changes hides the sticker display
   void _onFocusChange() {
-    if (_focusNode.hasFocus) {
-      // hides the stickers
-      setState(() {
-        _showStickers = false;
-      });
-    }
+    // hides the stickers
+    debugPrint('removing stickers');
+    setState(() {
+      _showStickers = false;
+    });
+  }
+
+  /// sends the selected sticker as message
+  Future<void> _sendSticker({@required String address}) async {
+    // TODO: implement the send sticker methods
+    return Future.value(false);
   }
 }
