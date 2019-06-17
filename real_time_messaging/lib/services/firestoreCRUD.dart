@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:real_time_messaging/models/message.dart';
 import 'package:real_time_messaging/models/user.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:real_time_messaging/utils/groupChatId.dart';
 
 class FireStoreCRUD {
   // static variables
@@ -201,9 +202,7 @@ class FireStoreCRUD {
       {@required String message,
       @required User sender,
       @required User recevier}) async {
-    final String messageAddress = sender.userId.hashCode <= recevier.userId.hashCode
-            ? '${sender.userId}-${recevier.userId}'
-            : '${recevier.userId}-${sender.userId}';
+    final String messageAddress = getGroupChatId(recevier: recevier, sender: sender);
 
     final Message messageObj = Message(
         message: message,

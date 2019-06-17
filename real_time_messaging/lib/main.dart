@@ -54,7 +54,7 @@ class MainApp extends StatelessWidget {
             debugPrint('current user is: ${user['name']} and friend user is : ${frdUser.name}');
             return MaterialPageRoute(
               builder: (context) => ChatPage(
-                    currentUser: user,
+                    currentUserMap: user,
                     friendUser: frdUser,
                   ),
             );

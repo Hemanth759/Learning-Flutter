@@ -7,11 +7,12 @@ import 'package:real_time_messaging/services/loader.dart';
 
 import 'package:real_time_messaging/pages/chats/widgets.dart';
 import 'package:real_time_messaging/utils/sizeconfig.dart';
+import 'package:real_time_messaging/utils/groupChatId.dart';
 
 class ChatPage extends StatefulWidget {
-  ChatPage({@required this.currentUser, @required this.friendUser});
+  ChatPage({@required this.currentUserMap, @required this.friendUser});
 
-  final Map<String, String> currentUser;
+  final Map<String, String> currentUserMap;
   final User friendUser;
 
   @override
@@ -24,6 +25,7 @@ class _ChatState extends State<ChatPage> {
   bool _isLoading;
   bool _showStickers;
 
+  final ScrollController _scrollController = ScrollController();
   final TextEditingController _messageController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   final FireStoreCRUD _fireStoreCRUD = FireStoreCRUD();
@@ -55,7 +57,11 @@ class _ChatState extends State<ChatPage> {
                   children: <Widget>[
                     // lists all the messages
                     Positioned(
-                      child: buildChatList(),
+                      child: buildChatList(
+                        groupChatId: getGroupChatId(recevier: widget.friendUser, sender: User.fromFireStoreCloud(widget.currentUserMap)),
+                        currentUser: User.fromFireStoreCloud(widget.currentUserMap),
+                        messageScrollController: _scrollController,
+                      ),
                     ),
 
                     // stickers
@@ -127,7 +133,7 @@ class _ChatState extends State<ChatPage> {
   Future<void> _sendMessage() async {
     final String message = _messageController.text;
     debugPrint('sending message : $message');
-    final User cUser = User.fromFireStoreCloud(widget.currentUser);
+    final User cUser = User.fromFireStoreCloud(widget.currentUserMap);
 
     await _fireStoreCRUD.sendMessage(
       message: message,

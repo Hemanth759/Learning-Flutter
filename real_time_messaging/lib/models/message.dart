@@ -32,7 +32,7 @@ class Message {
   Message.fromFirestoreCloud({@required Map<String,dynamic> map}) {
     this._message = map['message'];
     this._messageType = map['messageType'];
-    this._dateTime = map['dateTime'];
+    this._dateTime = DateTime.fromMicrosecondsSinceEpoch(map['dateTime']);
     this._senderId = map['senderId'];
     this._receiverId = map['receiverId'];
   }
@@ -42,7 +42,7 @@ class Message {
     Map<String, dynamic> map = Map<String, dynamic>();
     map['message'] = this._message;
     map['messageType'] = this._messageType;
-    map['dateTime'] = this._dateTime;
+    map['dateTime'] = this._dateTime.millisecondsSinceEpoch;
     map['senderId'] = this._senderId;
     map['receiverId'] = this._receiverId;
 
