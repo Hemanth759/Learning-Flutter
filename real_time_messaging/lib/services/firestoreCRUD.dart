@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+
+import 'package:real_time_messaging/models/message.dart';
 import 'package:real_time_messaging/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FireStoreCRUD {
-
   // static variables
   static FireStoreCRUD _fireStoreCRUD;
   static Firestore _database = Firestore.instance;
@@ -48,7 +49,7 @@ class FireStoreCRUD {
         .setData(user.toMap());
   }
 
-  Future<DocumentSnapshot> getDocumentById(String documentId) async {
+  Future<DocumentSnapshot> getUsersByDocumentId(String documentId) async {
     final DocumentSnapshot documentSnapshot =
         await _database.collection('Users').document(documentId).get();
     if (documentSnapshot.exists) {
@@ -126,8 +127,10 @@ class FireStoreCRUD {
     // if afterdocument is not given
 
     else {
-
-      final DocumentSnapshot lastSnap = await _database.collection(collectionName).document(afterDocumentID).get();
+      final DocumentSnapshot lastSnap = await _database
+          .collection(collectionName)
+          .document(afterDocumentID)
+          .get();
 
       if (limit == null && orderBy == null) {
         // gets all the users
@@ -191,5 +194,29 @@ class FireStoreCRUD {
         return users;
       }
     }
+  }
+
+  /// sends the message to firestore database
+  Future<void> sendMessage(
+      {@required String message,
+      @required User sender,
+      @required User recevier}) async {
+    final String messageAddress =
+        sender.userId.hashCode <= recevier.userId.hashCode
+            ? '${sender.userId}-${recevier.userId}'
+            : '${recevier.userId}-${sender.userId}';
+
+    final Message messageObj = Message(
+        message: message,
+        messageType: 1,
+        datetime: DateTime.now(),
+        senderId: sender.userId,
+        receiverId: recevier.userId);
+
+    await _database
+        .collection('Messages')
+        .document(messageAddress)
+        .collection(messageAddress)
+        .add(messageObj.toMap());
   }
 }

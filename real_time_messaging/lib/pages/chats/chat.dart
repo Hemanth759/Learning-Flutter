@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:real_time_messaging/models/user.dart';
+import 'package:real_time_messaging/services/firestoreCRUD.dart';
 import 'package:real_time_messaging/services/loader.dart';
 
 import 'package:real_time_messaging/pages/chats/widgets.dart';
@@ -25,6 +26,7 @@ class _ChatState extends State<ChatPage> {
 
   final TextEditingController _messageController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+  final FireStoreCRUD _fireStoreCRUD = FireStoreCRUD();
 
   @override
   void initState() {
@@ -123,8 +125,9 @@ class _ChatState extends State<ChatPage> {
 
   /// sends the typed message to the firestore
   Future<void> _sendMessage() async {
-    // TODO: implement the sending message to firestore method
     final String message = _messageController.text;
     debugPrint('sending message : $message');
+
+    await _fireStoreCRUD.sendMessage();
   }
 }
