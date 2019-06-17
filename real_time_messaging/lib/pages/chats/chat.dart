@@ -21,7 +21,7 @@ class _ChatState extends State<ChatPage> {
   bool _isLoading;
   bool _showStickers;
 
-  final FocusNode _focusNode  = FocusNode();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
@@ -40,25 +40,33 @@ class _ChatState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(widget.friendUser.name),
-        ),
-        body: _isLoading == true
-            ? Loader()
-            : Stack(
-              children: <Widget>[
-                // lists all the messages
-                buildChatList(),
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text(widget.friendUser.name),
+          ),
+          body: _isLoading == true
+              ? Loader()
+              : Stack(
+                  children: <Widget>[
+                    Positioned(
+                      child: Column(
+                        children: <Widget>[
+                          // lists all the messages
+                          buildChatList(),
 
-                // stickers
-                _showStickers ? buildStickers() : Container(),
+                          // stickers
+                          _showStickers ? buildStickers() : Container(),
+                        ],
+                      ),
+                    ),
 
-                // shows the input layout
-                buildInputLayout(),
-              ],
-            )
-      ),
+                    // shows the input layout
+                    Positioned(
+                      bottom: 5,
+                      child: buildInputLayout(),
+                    )
+                  ],
+                )),
       onWillPop: _goBack,
     );
   }
@@ -66,9 +74,9 @@ class _ChatState extends State<ChatPage> {
   /// function to go back to previous page
   Future<bool> _goBack() {
     // if the display is on stickers
-    if(_showStickers) {
+    if (_showStickers) {
       setState(() {
-       _showStickers = false; 
+        _showStickers = false;
       });
     } else {
       Navigator.of(context).pop();
@@ -77,22 +85,22 @@ class _ChatState extends State<ChatPage> {
     return Future.value(false);
   }
 
-  /// changes the focus out of keyboard and displays the 
+  /// changes the focus out of keyboard and displays the
   /// stickers instead of keyboard
   void _getStickers() {
     _focusNode.unfocus();
     setState(() {
-     _showStickers = true; 
+      _showStickers = true;
     });
   }
 
   /// when focus changes hides the sticker display
   void _onFocusChange() {
-    if(_focusNode.hasFocus) {
+    if (_focusNode.hasFocus) {
       // hides the stickers
       setState(() {
-       _showStickers = false; 
+        _showStickers = false;
       });
     }
-  } 
+  }
 }
