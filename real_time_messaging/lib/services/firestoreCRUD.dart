@@ -201,8 +201,7 @@ class FireStoreCRUD {
       {@required String message,
       @required User sender,
       @required User recevier}) async {
-    final String messageAddress =
-        sender.userId.hashCode <= recevier.userId.hashCode
+    final String messageAddress = sender.userId.hashCode <= recevier.userId.hashCode
             ? '${sender.userId}-${recevier.userId}'
             : '${recevier.userId}-${sender.userId}';
 
@@ -211,7 +210,8 @@ class FireStoreCRUD {
         messageType: 1,
         datetime: DateTime.now(),
         senderId: sender.userId,
-        receiverId: recevier.userId);
+        receiverId: recevier.userId
+      );
 
     await _database
         .collection('Messages')

@@ -127,7 +127,12 @@ class _ChatState extends State<ChatPage> {
   Future<void> _sendMessage() async {
     final String message = _messageController.text;
     debugPrint('sending message : $message');
+    final User cUser = User.fromFireStoreCloud(widget.currentUser);
 
-    await _fireStoreCRUD.sendMessage();
+    await _fireStoreCRUD.sendMessage(
+      message: message,
+      sender: cUser,
+      recevier: widget.friendUser,
+    );
   }
 }
