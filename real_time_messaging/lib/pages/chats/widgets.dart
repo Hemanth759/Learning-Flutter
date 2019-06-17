@@ -8,7 +8,17 @@ Widget buildChatList() {
   );
 }
 
-void buildStickers() {
+Widget buildStickers() {
   // TODO: display stickers
+  return Container();
 }
 
+Widget buildInputLayout() {
+  return Positioned(
+    bottom: 5,
+    width: double.infinity,
+    child: Container(
+      child: Text('chat bar'),
+    ),
+  );
+}

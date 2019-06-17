@@ -21,11 +21,19 @@ class _ChatState extends State<ChatPage> {
   bool _isLoading;
   bool _showStickers;
 
+  final FocusNode _focusNode  = FocusNode();
+
   @override
   void initState() {
     _isLoading = false;
     _showStickers = false;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -44,7 +52,10 @@ class _ChatState extends State<ChatPage> {
                 buildChatList(),
 
                 // stickers
+                _showStickers ? buildStickers() : Container(),
 
+                // shows the input layout
+                buildInputLayout(),
               ],
             )
       ),
@@ -69,6 +80,19 @@ class _ChatState extends State<ChatPage> {
   /// changes the focus out of keyboard and displays the 
   /// stickers instead of keyboard
   void _getStickers() {
-    // TODO: function to toggle stickers and reset the app
+    _focusNode.unfocus();
+    setState(() {
+     _showStickers = true; 
+    });
   }
+
+  /// when focus changes hides the sticker display
+  void _onFocusChange() {
+    if(_focusNode.hasFocus) {
+      // hides the stickers
+      setState(() {
+       _showStickers = false; 
+      });
+    }
+  } 
 }
