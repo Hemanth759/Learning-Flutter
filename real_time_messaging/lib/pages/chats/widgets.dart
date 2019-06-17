@@ -197,8 +197,10 @@ Widget buildStickers({@required Function sendFunction}) {
 /// builds the layout for the keypad
 Widget buildInputLayout(
     {@required FocusNode focusNode,
+    @required TextEditingController messageController,
     @required Function showStickers,
-    @required Function showKeyboard}) {
+    @required Function showKeyboard,
+    @required Function sendMessage}) {
   return Container(
     height: SizeConfig.blockSizeVertical * 5,
     width: SizeConfig.blockSizeHorizontal * 100.0,
@@ -235,9 +237,9 @@ Widget buildInputLayout(
           flex: 1,
           fit: FlexFit.tight,
           child: Container(
-            // height: 50,
             child: Container(
               child: TextField(
+                controller: messageController,
                 onTap: showKeyboard,
                 focusNode: focusNode,
                 style: TextStyle(color: Colors.amber, fontSize: 20.0),
@@ -246,10 +248,8 @@ Widget buildInputLayout(
                   hintStyle: TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.grey),
                   filled: true,
-                  // fillColor: Colors.black,
                 ),
               ),
-              // color: Colors.black,
             ),
           ),
         ),
@@ -259,9 +259,7 @@ Widget buildInputLayout(
           child: Container(
             child: IconButton(
               icon: Icon(Icons.send),
-              onPressed: () {
-                // TODO: do the send process
-              },
+              onPressed: sendMessage,
             ),
           ),
         ),

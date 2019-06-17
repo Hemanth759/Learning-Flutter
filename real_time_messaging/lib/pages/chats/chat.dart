@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:real_time_messaging/models/user.dart';
 import 'package:real_time_messaging/services/loader.dart';
 
 import 'package:real_time_messaging/pages/chats/widgets.dart';
+import 'package:real_time_messaging/utils/sizeconfig.dart';
 
 class ChatPage extends StatefulWidget {
   ChatPage({@required this.currentUser, @required this.friendUser});
@@ -21,6 +23,7 @@ class _ChatState extends State<ChatPage> {
   bool _isLoading;
   bool _showStickers;
 
+  final TextEditingController _messageController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
 
   @override
@@ -55,6 +58,7 @@ class _ChatState extends State<ChatPage> {
 
                     // stickers
                     Positioned(
+                      bottom: SizeConfig.blockSizeVertical * 5,
                       child: _showStickers
                           ? buildStickers(
                               sendFunction: _sendSticker,
@@ -64,11 +68,13 @@ class _ChatState extends State<ChatPage> {
 
                     // shows the input layout
                     Positioned(
-                      bottom: 5,
+                      bottom: 0.0,
                       child: buildInputLayout(
                         focusNode: _focusNode,
+                        messageController: _messageController,
                         showStickers: _getStickers,
                         showKeyboard: _onFocusChange,
+                        sendMessage: _sendMessage,
                       ),
                     )
                   ],
@@ -113,5 +119,12 @@ class _ChatState extends State<ChatPage> {
     // TODO: implement the send sticker methods
     debugPrint('sending sticker with addres: $address');
     return Future.value(false);
+  }
+
+  /// sends the typed message to the firestore
+  Future<void> _sendMessage() async {
+    // TODO: implement the sending message to firestore method
+    final String message = _messageController.text;
+    debugPrint('sending message : $message');
   }
 }
