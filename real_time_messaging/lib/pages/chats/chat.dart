@@ -103,7 +103,6 @@ class _ChatState extends State<ChatPage> {
   /// when focus changes hides the sticker display
   void _onFocusChange() {
     // hides the stickers
-    debugPrint('removing stickers');
     setState(() {
       _showStickers = false;
     });
@@ -112,6 +111,7 @@ class _ChatState extends State<ChatPage> {
   /// sends the selected sticker as message
   Future<void> _sendSticker({@required String address}) async {
     // TODO: implement the send sticker methods
+    debugPrint('sending sticker with addres: $address');
     return Future.value(false);
   }
 }

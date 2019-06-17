@@ -22,14 +22,170 @@ Widget buildStickers({@required Function sendFunction}) {
           children: <Widget>[
             FlatButton(
               onPressed: () {
-                // TODO: function for inserting the image to messages
+                sendFunction(
+                  address: 'assets/stickers/mimi1.gif',
+                );
               },
-              child: Image.asset(
-                'assets/stickers/mimi1.gif',
+              child: Container(
                 height: SizeConfig.blockSizeVertical * 15.0,
-                width: SizeConfig.blockSizeHorizontal * 33.3,
-                fit: BoxFit.fill,
-              ),
+                width: SizeConfig.blockSizeHorizontal * 20.0,
+                child: Image.asset(
+                  'assets/stickers/mimi1.gif',
+                  height: SizeConfig.blockSizeVertical * 15.0,
+                  width: SizeConfig.blockSizeHorizontal * 20.0,
+                  fit: BoxFit.fill,
+                ),
+              )
+            ),
+            FlatButton(
+              onPressed: () {
+                sendFunction(
+                  address: 'assets/stickers/mimi2.gif',
+                );
+              },
+              child: Container(
+                height: SizeConfig.blockSizeVertical * 15.0,
+                width: SizeConfig.blockSizeHorizontal * 20.0,
+                child: Image.asset(
+                  'assets/stickers/mimi2.gif',
+                  height: SizeConfig.blockSizeVertical * 15.0,
+                  width: SizeConfig.blockSizeHorizontal * 20.0,
+                  fit: BoxFit.fill,
+                ),
+              )
+            ),
+            FlatButton(
+              onPressed: () {
+                sendFunction(
+                  address: 'assets/stickers/mimi3.gif',
+                );
+              },
+              child: Container(
+                height: SizeConfig.blockSizeVertical * 15.0,
+                width: SizeConfig.blockSizeHorizontal * 20.0,
+                child: Image.asset(
+                  'assets/stickers/mimi3.gif',
+                  height: SizeConfig.blockSizeVertical * 15.0,
+                  width: SizeConfig.blockSizeHorizontal * 20.0,
+                  fit: BoxFit.fill,
+                ),
+              )
+            ),
+          ],
+        ),
+
+        // second row
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            FlatButton(
+              onPressed: () {
+                sendFunction(
+                  address: 'assets/stickers/mimi4.gif',
+                );
+              },
+              child: Container(
+                height: SizeConfig.blockSizeVertical * 15.0,
+                width: SizeConfig.blockSizeHorizontal * 20.0,
+                child: Image.asset(
+                  'assets/stickers/mimi4.gif',
+                  height: SizeConfig.blockSizeVertical * 15.0,
+                  width: SizeConfig.blockSizeHorizontal * 20.0,
+                  fit: BoxFit.fill,
+                ),
+              )
+            ),
+            FlatButton(
+              onPressed: () {
+                sendFunction(
+                  address: 'assets/stickers/mimi5.gif',
+                );
+              },
+              child: Container(
+                height: SizeConfig.blockSizeVertical * 15.0,
+                width: SizeConfig.blockSizeHorizontal * 20.0,
+                child: Image.asset(
+                  'assets/stickers/mimi5.gif',
+                  height: SizeConfig.blockSizeVertical * 15.0,
+                  width: SizeConfig.blockSizeHorizontal * 20.0,
+                  fit: BoxFit.fill,
+                ),
+              )
+            ),
+            FlatButton(
+              onPressed: () {
+                sendFunction(
+                  address: 'assets/stickers/mimi6.gif',
+                );
+              },
+              child: Container(
+                height: SizeConfig.blockSizeVertical * 15.0,
+                width: SizeConfig.blockSizeHorizontal * 20.0,
+                child: Image.asset(
+                  'assets/stickers/mimi6.gif',
+                  height: SizeConfig.blockSizeVertical * 15.0,
+                  width: SizeConfig.blockSizeHorizontal * 20.0,
+                  fit: BoxFit.fill,
+                ),
+              )
+            ),
+          ],
+        ),
+
+        // third row
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            FlatButton(
+              onPressed: () {
+                sendFunction(
+                  address: 'assets/stickers/mimi7.gif',
+                );
+              },
+              child: Container(
+                height: SizeConfig.blockSizeVertical * 15.0,
+                width: SizeConfig.blockSizeHorizontal * 20.0,
+                child: Image.asset(
+                  'assets/stickers/mimi7.gif',
+                  height: SizeConfig.blockSizeVertical * 15.0,
+                  width: SizeConfig.blockSizeHorizontal * 20.0,
+                  fit: BoxFit.fill,
+                ),
+              )
+            ),
+            FlatButton(
+              onPressed: () {
+                sendFunction(
+                  address: 'assets/stickers/mimi8.gif',
+                );
+              },
+              child: Container(
+                height: SizeConfig.blockSizeVertical * 15.0,
+                width: SizeConfig.blockSizeHorizontal * 20.0,
+                child: Image.asset(
+                  'assets/stickers/mimi8.gif',
+                  height: SizeConfig.blockSizeVertical * 15.0,
+                  width: SizeConfig.blockSizeHorizontal * 20.0,
+                  fit: BoxFit.fill,
+                ),
+              )
+            ),
+            FlatButton(
+              onPressed: () {
+                sendFunction(
+                  address: 'assets/stickers/mimi9.gif',
+                );
+              },
+              child: Container(
+                height: SizeConfig.blockSizeVertical * 15.0,
+                width: SizeConfig.blockSizeHorizontal * 20.0,
+                child: Image.asset(
+                  'assets/stickers/mimi9.gif',
+                  height: SizeConfig.blockSizeVertical * 15.0,
+                  width: SizeConfig.blockSizeHorizontal * 20.0,
+                  fit: BoxFit.fill,
+                ),
+              )
             ),
           ],
         ),
@@ -39,7 +195,10 @@ Widget buildStickers({@required Function sendFunction}) {
 }
 
 /// builds the layout for the keypad
-Widget buildInputLayout({@required FocusNode focusNode,@required Function showStickers, @required Function showKeyboard}) {
+Widget buildInputLayout(
+    {@required FocusNode focusNode,
+    @required Function showStickers,
+    @required Function showKeyboard}) {
   return Container(
     height: SizeConfig.blockSizeVertical * 5,
     width: SizeConfig.blockSizeHorizontal * 100.0,
