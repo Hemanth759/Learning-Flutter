@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:real_time_messaging/models/message.dart';
 
 import 'package:real_time_messaging/models/user.dart';
+import 'package:real_time_messaging/models/message.dart';
 import 'package:real_time_messaging/services/firestoreCRUD.dart';
 import 'package:real_time_messaging/services/loader.dart';
 

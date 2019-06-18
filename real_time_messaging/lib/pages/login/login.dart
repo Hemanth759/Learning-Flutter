@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:real_time_messaging/services/authentication.dart';
 import 'package:real_time_messaging/services/firestoreCRUD.dart';
@@ -147,6 +148,7 @@ class _LoginState extends State<LoginPage> {
 
   /// redirects to home page
   void navigateToHome() {
+    Fluttertoast.showToast(msg: 'Logged in');
     Navigator.of(context).pushNamedAndRemoveUntil(
         '/home', (Route<dynamic> route) => false,
         arguments: _currentUser);
