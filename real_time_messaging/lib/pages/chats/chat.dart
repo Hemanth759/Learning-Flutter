@@ -169,6 +169,7 @@ class _ChatState extends State<ChatPage> {
   /// sends the typed message to the firestore
   Future<void> _sendMessage() async {
     final String message = _messageController.text;
+    _messageController.clear();
     debugPrint('sending message : $message');
     final User cUser = User.fromFireStoreCloud(widget.currentUserMap);
 
