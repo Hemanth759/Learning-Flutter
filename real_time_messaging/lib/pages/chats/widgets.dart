@@ -67,7 +67,7 @@ Widget buildMessage(
                   style: TextStyle(color: Colors.white),
                 ),
                 padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                width: 200.0,
+                width: SizeConfig.blockSizeHorizontal * 45,
                 decoration: BoxDecoration(
                     color: Colors.grey,
                     borderRadius: BorderRadius.circular(8.0)),
