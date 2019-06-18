@@ -168,6 +168,7 @@ Widget buildMessage(
 
 Widget buildStickers({@required Function sendFunction}) {
   return Container(
+    color: Colors.white,
     height: SizeConfig.blockSizeVertical * 45.0,
     width: SizeConfig.blockSizeHorizontal * 100.0,
     child: Column(
@@ -350,6 +351,7 @@ Widget buildInputLayout(
     @required Function sendMessage,
     @required Function sendImage}) {
   return Container(
+    color: Colors.black12,
     height: SizeConfig.blockSizeVertical * 7,
     width: SizeConfig.blockSizeHorizontal * 100.0,
     child: Row(
