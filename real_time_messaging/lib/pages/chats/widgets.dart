@@ -6,73 +6,97 @@ import 'package:real_time_messaging/models/user.dart';
 import 'package:real_time_messaging/services/loader.dart';
 import 'package:real_time_messaging/utils/sizeconfig.dart';
 
-Widget buildChatList({@required String groupChatId, @required ScrollController messageScrollController, @required User currentUser}) {
+Widget buildChatList({
+  @required String groupChatId,
+  @required ScrollController messageScrollController,
+  @required User currentUser,
+}) {
   return Container(
     child: groupChatId == ''
-        ? Loader() 
+        ? Loader()
         : StreamBuilder(
-          stream: Firestore.instance
-                  .collection('Messages')
-                  .document(groupChatId)
-                  .collection(groupChatId)
-                  .orderBy('dateTime', descending: true)
-                  .limit(20)
-                  .snapshots(),
-          builder: (context, snapshots) {
-            if (!snapshots.hasData) {
-              return Loader();
-            } else {
-              List<DocumentSnapshot> listMessage = snapshots.data.documents;
-              return ListView.builder(
-                padding: EdgeInsets.all(10.0),
-                itemCount: listMessage.length,
-                reverse: true,
-                controller: messageScrollController,
-                itemBuilder: (context, index) {
-                  return buildMessage(listMessage[index], currentUser: currentUser);
-                },
-              );
-            }
-          },
-        ),
+            stream: Firestore.instance
+                .collection('Messages')
+                .document(groupChatId)
+                .collection(groupChatId)
+                .orderBy('dateTime', descending: true)
+                .limit(20)
+                .snapshots(),
+            builder: (context, snapshots) {
+              if (!snapshots.hasData) {
+                return Loader();
+              } else {
+                List<DocumentSnapshot> listMessage = snapshots.data.documents;
+                return ListView.builder(
+                  padding: EdgeInsets.all(10.0),
+                  itemCount: listMessage.length,
+                  reverse: true,
+                  controller: messageScrollController,
+                  itemBuilder: (context, index) {
+                    if(index == 0) {
+                      return buildMessage(listMessage[index],
+                      currentUser: currentUser,
+                      isLastmessage: true);
+                    }
+                    return buildMessage(listMessage[index],
+                        currentUser: currentUser);
+                  },
+                );
+              }
+            },
+          ),
   );
 }
 
 /// builds the basic message tile
-Widget buildMessage(DocumentSnapshot doc, {@required User currentUser}) {
+Widget buildMessage(
+  DocumentSnapshot doc, {
+  @required User currentUser,
+  bool isLastmessage: false,
+  }) {
   Message message = Message.fromFirestoreCloud(map: doc.data);
-  if(message.senderId == currentUser.userId) {
+  if (message.senderId == currentUser.userId) {
     // should be in right side of the screen
     return Row(
       children: <Widget>[
         message.messageType == 1
-        ? Container(
-          child: Text(
-            message.message,
-            style: TextStyle(color: Colors.white),
-          ),
-          padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-          width: 200.0,
-          decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(8.0)),
-          margin: EdgeInsets.only(bottom: SizeConfig.blockSizeVertical * 6, right: 10.0),
-        )
-        : Container(),
+            ? Container(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  message.message,
+                  style: TextStyle(color: Colors.white),
+                ),
+                padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                width: 200.0,
+                decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(8.0)),
+                margin: EdgeInsets.only(
+                    bottom: isLastmessage ? SizeConfig.blockSizeVertical * 6 : SizeConfig.blockSizeVertical * 1,
+                    left: SizeConfig.blockSizeHorizontal * 45),
+              )
+            : Container(),
       ],
     );
   } else {
     return Row(
       children: <Widget>[
-        message.messageType == 1 
-        ? Container(
-          child: Text(
-            message.message,
-            style: TextStyle(color: Colors.white),
-          ),
-          padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-          width: 200.0,
-          decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(8.0)),
-          margin: EdgeInsets.only(bottom: SizeConfig.blockSizeVertical * 6, left: 10.0),
-        ) : Container()
+        message.messageType == 1
+            ? Container(
+                child: Text(
+                  message.message,
+                  style: TextStyle(color: Colors.white),
+                ),
+                padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                width: 200.0,
+                decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(8.0)),
+                margin: EdgeInsets.only(
+                    bottom: isLastmessage ? SizeConfig.blockSizeVertical * 6 : SizeConfig.blockSizeVertical * 1,
+                    left: 10.0),
+              )
+            : Container()
       ],
     );
   }
@@ -89,56 +113,53 @@ Widget buildStickers({@required Function sendFunction}) {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             FlatButton(
-              onPressed: () {
-                sendFunction(
-                  address: 'assets/stickers/mimi1.gif',
-                );
-              },
-              child: Container(
-                height: SizeConfig.blockSizeVertical * 15.0,
-                width: SizeConfig.blockSizeHorizontal * 20.0,
-                child: Image.asset(
-                  'assets/stickers/mimi1.gif',
+                onPressed: () {
+                  sendFunction(
+                    address: 'assets/stickers/mimi1.gif',
+                  );
+                },
+                child: Container(
                   height: SizeConfig.blockSizeVertical * 15.0,
                   width: SizeConfig.blockSizeHorizontal * 20.0,
-                  fit: BoxFit.fill,
-                ),
-              )
-            ),
+                  child: Image.asset(
+                    'assets/stickers/mimi1.gif',
+                    height: SizeConfig.blockSizeVertical * 15.0,
+                    width: SizeConfig.blockSizeHorizontal * 20.0,
+                    fit: BoxFit.fill,
+                  ),
+                )),
             FlatButton(
-              onPressed: () {
-                sendFunction(
-                  address: 'assets/stickers/mimi2.gif',
-                );
-              },
-              child: Container(
-                height: SizeConfig.blockSizeVertical * 15.0,
-                width: SizeConfig.blockSizeHorizontal * 20.0,
-                child: Image.asset(
-                  'assets/stickers/mimi2.gif',
+                onPressed: () {
+                  sendFunction(
+                    address: 'assets/stickers/mimi2.gif',
+                  );
+                },
+                child: Container(
                   height: SizeConfig.blockSizeVertical * 15.0,
                   width: SizeConfig.blockSizeHorizontal * 20.0,
-                  fit: BoxFit.fill,
-                ),
-              )
-            ),
+                  child: Image.asset(
+                    'assets/stickers/mimi2.gif',
+                    height: SizeConfig.blockSizeVertical * 15.0,
+                    width: SizeConfig.blockSizeHorizontal * 20.0,
+                    fit: BoxFit.fill,
+                  ),
+                )),
             FlatButton(
-              onPressed: () {
-                sendFunction(
-                  address: 'assets/stickers/mimi3.gif',
-                );
-              },
-              child: Container(
-                height: SizeConfig.blockSizeVertical * 15.0,
-                width: SizeConfig.blockSizeHorizontal * 20.0,
-                child: Image.asset(
-                  'assets/stickers/mimi3.gif',
+                onPressed: () {
+                  sendFunction(
+                    address: 'assets/stickers/mimi3.gif',
+                  );
+                },
+                child: Container(
                   height: SizeConfig.blockSizeVertical * 15.0,
                   width: SizeConfig.blockSizeHorizontal * 20.0,
-                  fit: BoxFit.fill,
-                ),
-              )
-            ),
+                  child: Image.asset(
+                    'assets/stickers/mimi3.gif',
+                    height: SizeConfig.blockSizeVertical * 15.0,
+                    width: SizeConfig.blockSizeHorizontal * 20.0,
+                    fit: BoxFit.fill,
+                  ),
+                )),
           ],
         ),
 
@@ -147,56 +168,53 @@ Widget buildStickers({@required Function sendFunction}) {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             FlatButton(
-              onPressed: () {
-                sendFunction(
-                  address: 'assets/stickers/mimi4.gif',
-                );
-              },
-              child: Container(
-                height: SizeConfig.blockSizeVertical * 15.0,
-                width: SizeConfig.blockSizeHorizontal * 20.0,
-                child: Image.asset(
-                  'assets/stickers/mimi4.gif',
+                onPressed: () {
+                  sendFunction(
+                    address: 'assets/stickers/mimi4.gif',
+                  );
+                },
+                child: Container(
                   height: SizeConfig.blockSizeVertical * 15.0,
                   width: SizeConfig.blockSizeHorizontal * 20.0,
-                  fit: BoxFit.fill,
-                ),
-              )
-            ),
+                  child: Image.asset(
+                    'assets/stickers/mimi4.gif',
+                    height: SizeConfig.blockSizeVertical * 15.0,
+                    width: SizeConfig.blockSizeHorizontal * 20.0,
+                    fit: BoxFit.fill,
+                  ),
+                )),
             FlatButton(
-              onPressed: () {
-                sendFunction(
-                  address: 'assets/stickers/mimi5.gif',
-                );
-              },
-              child: Container(
-                height: SizeConfig.blockSizeVertical * 15.0,
-                width: SizeConfig.blockSizeHorizontal * 20.0,
-                child: Image.asset(
-                  'assets/stickers/mimi5.gif',
+                onPressed: () {
+                  sendFunction(
+                    address: 'assets/stickers/mimi5.gif',
+                  );
+                },
+                child: Container(
                   height: SizeConfig.blockSizeVertical * 15.0,
                   width: SizeConfig.blockSizeHorizontal * 20.0,
-                  fit: BoxFit.fill,
-                ),
-              )
-            ),
+                  child: Image.asset(
+                    'assets/stickers/mimi5.gif',
+                    height: SizeConfig.blockSizeVertical * 15.0,
+                    width: SizeConfig.blockSizeHorizontal * 20.0,
+                    fit: BoxFit.fill,
+                  ),
+                )),
             FlatButton(
-              onPressed: () {
-                sendFunction(
-                  address: 'assets/stickers/mimi6.gif',
-                );
-              },
-              child: Container(
-                height: SizeConfig.blockSizeVertical * 15.0,
-                width: SizeConfig.blockSizeHorizontal * 20.0,
-                child: Image.asset(
-                  'assets/stickers/mimi6.gif',
+                onPressed: () {
+                  sendFunction(
+                    address: 'assets/stickers/mimi6.gif',
+                  );
+                },
+                child: Container(
                   height: SizeConfig.blockSizeVertical * 15.0,
                   width: SizeConfig.blockSizeHorizontal * 20.0,
-                  fit: BoxFit.fill,
-                ),
-              )
-            ),
+                  child: Image.asset(
+                    'assets/stickers/mimi6.gif',
+                    height: SizeConfig.blockSizeVertical * 15.0,
+                    width: SizeConfig.blockSizeHorizontal * 20.0,
+                    fit: BoxFit.fill,
+                  ),
+                )),
           ],
         ),
 
@@ -205,56 +223,53 @@ Widget buildStickers({@required Function sendFunction}) {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             FlatButton(
-              onPressed: () {
-                sendFunction(
-                  address: 'assets/stickers/mimi7.gif',
-                );
-              },
-              child: Container(
-                height: SizeConfig.blockSizeVertical * 15.0,
-                width: SizeConfig.blockSizeHorizontal * 20.0,
-                child: Image.asset(
-                  'assets/stickers/mimi7.gif',
+                onPressed: () {
+                  sendFunction(
+                    address: 'assets/stickers/mimi7.gif',
+                  );
+                },
+                child: Container(
                   height: SizeConfig.blockSizeVertical * 15.0,
                   width: SizeConfig.blockSizeHorizontal * 20.0,
-                  fit: BoxFit.fill,
-                ),
-              )
-            ),
+                  child: Image.asset(
+                    'assets/stickers/mimi7.gif',
+                    height: SizeConfig.blockSizeVertical * 15.0,
+                    width: SizeConfig.blockSizeHorizontal * 20.0,
+                    fit: BoxFit.fill,
+                  ),
+                )),
             FlatButton(
-              onPressed: () {
-                sendFunction(
-                  address: 'assets/stickers/mimi8.gif',
-                );
-              },
-              child: Container(
-                height: SizeConfig.blockSizeVertical * 15.0,
-                width: SizeConfig.blockSizeHorizontal * 20.0,
-                child: Image.asset(
-                  'assets/stickers/mimi8.gif',
+                onPressed: () {
+                  sendFunction(
+                    address: 'assets/stickers/mimi8.gif',
+                  );
+                },
+                child: Container(
                   height: SizeConfig.blockSizeVertical * 15.0,
                   width: SizeConfig.blockSizeHorizontal * 20.0,
-                  fit: BoxFit.fill,
-                ),
-              )
-            ),
+                  child: Image.asset(
+                    'assets/stickers/mimi8.gif',
+                    height: SizeConfig.blockSizeVertical * 15.0,
+                    width: SizeConfig.blockSizeHorizontal * 20.0,
+                    fit: BoxFit.fill,
+                  ),
+                )),
             FlatButton(
-              onPressed: () {
-                sendFunction(
-                  address: 'assets/stickers/mimi9.gif',
-                );
-              },
-              child: Container(
-                height: SizeConfig.blockSizeVertical * 15.0,
-                width: SizeConfig.blockSizeHorizontal * 20.0,
-                child: Image.asset(
-                  'assets/stickers/mimi9.gif',
+                onPressed: () {
+                  sendFunction(
+                    address: 'assets/stickers/mimi9.gif',
+                  );
+                },
+                child: Container(
                   height: SizeConfig.blockSizeVertical * 15.0,
                   width: SizeConfig.blockSizeHorizontal * 20.0,
-                  fit: BoxFit.fill,
-                ),
-              )
-            ),
+                  child: Image.asset(
+                    'assets/stickers/mimi9.gif',
+                    height: SizeConfig.blockSizeVertical * 15.0,
+                    width: SizeConfig.blockSizeHorizontal * 20.0,
+                    fit: BoxFit.fill,
+                  ),
+                )),
           ],
         ),
       ],
