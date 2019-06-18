@@ -119,7 +119,7 @@ class _ChatState extends State<ChatPage> {
   void _getStickers() {
     _focusNode.unfocus();
     setState(() {
-      _showStickers = true;
+      _showStickers = !_showStickers;
     });
   }
 
