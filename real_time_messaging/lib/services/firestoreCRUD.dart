@@ -197,6 +197,27 @@ class FireStoreCRUD {
     }
   }
 
+  /// sends message as a sticker
+  Future<void> sendSticker({@required String stickerAddress,
+        @required User sender, 
+        @required User recevier}) async {
+    final String messageAddress = getGroupChatId(recevier: recevier, sender: sender);
+
+    final Message messageObj = Message(
+      message: stickerAddress,
+      messageType: 2,
+      datetime: DateTime.now(),
+      senderId: sender.userId,
+      receiverId: recevier.userId
+    );
+
+    await _database
+        .collection('Messages')
+        .document(messageAddress)
+        .collection(messageAddress)
+        .add(messageObj.toMap());
+  }
+
   /// sends the message to firestore database
   Future<void> sendMessage(
       {@required String message,

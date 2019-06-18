@@ -124,9 +124,12 @@ class _ChatState extends State<ChatPage> {
 
   /// sends the selected sticker as message
   Future<void> _sendSticker({@required String address}) async {
-    // TODO: implement the send sticker methods
     debugPrint('sending sticker with addres: $address');
-    return Future.value(false);
+    await _fireStoreCRUD.sendSticker(
+      stickerAddress: address,
+      sender: User.fromFireStoreCloud(widget.currentUserMap),
+      recevier: widget.friendUser,
+    );
   }
 
   /// sends the typed message to the firestore

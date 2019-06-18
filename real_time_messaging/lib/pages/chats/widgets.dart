@@ -75,7 +75,20 @@ Widget buildMessage(
                     bottom: isLastmessage ? SizeConfig.blockSizeVertical * 6 : SizeConfig.blockSizeVertical * 1,
                     left: SizeConfig.blockSizeHorizontal * 45),
               )
-            : Container(),
+            : message.messageType == 2 
+              ? Container(
+                // sticker here
+                padding: EdgeInsets.only(bottom: isLastmessage ? SizeConfig.blockSizeVertical * 5 : 0.0),
+                width: SizeConfig.blockSizeHorizontal * 85,
+                alignment: Alignment.centerRight,
+                child: Image.asset(
+                  message.message,
+                  fit: BoxFit.fill,
+                  width: SizeConfig.blockSizeHorizontal * 20,
+                  height: SizeConfig.blockSizeVertical * 15,
+                ),
+              )
+              : Container(),
       ],
     );
   } else {
@@ -96,7 +109,18 @@ Widget buildMessage(
                     bottom: isLastmessage ? SizeConfig.blockSizeVertical * 6 : SizeConfig.blockSizeVertical * 1,
                     left: 10.0),
               )
-            : Container()
+            : message.messageType == 2
+              ? Container(
+                // sticker here
+                padding: EdgeInsets.only(bottom: isLastmessage ? SizeConfig.blockSizeVertical * 5 : 0.0),
+                alignment: Alignment.centerLeft,
+                child: Image.asset(
+                  message.message,
+                  width: SizeConfig.blockSizeHorizontal * 20,
+                  height: SizeConfig.blockSizeVertical * 15,
+                ),
+              ) 
+              : Container()
       ],
     );
   }
