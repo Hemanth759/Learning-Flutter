@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:real_time_messaging/models/message.dart';
 
 import 'package:real_time_messaging/models/user.dart';
 import 'package:real_time_messaging/services/firestoreCRUD.dart';
 import 'package:real_time_messaging/services/loader.dart';
 
 import 'package:real_time_messaging/pages/chats/widgets.dart';
+import 'package:real_time_messaging/services/storageIO.dart';
 import 'package:real_time_messaging/utils/sizeconfig.dart';
 import 'package:real_time_messaging/utils/groupChatId.dart';
 
@@ -58,8 +63,12 @@ class _ChatState extends State<ChatPage> {
                     // lists all the messages
                     Positioned(
                       child: buildChatList(
-                        groupChatId: getGroupChatId(recevier: widget.friendUser, sender: User.fromFireStoreCloud(widget.currentUserMap)),
-                        currentUser: User.fromFireStoreCloud(widget.currentUserMap),
+                        groupChatId: getGroupChatId(
+                            recevier: widget.friendUser,
+                            sender:
+                                User.fromFireStoreCloud(widget.currentUserMap)),
+                        currentUser:
+                            User.fromFireStoreCloud(widget.currentUserMap),
                         messageScrollController: _scrollController,
                       ),
                     ),
@@ -78,12 +87,12 @@ class _ChatState extends State<ChatPage> {
                     Positioned(
                       bottom: 0.0,
                       child: buildInputLayout(
-                        focusNode: _focusNode,
-                        messageController: _messageController,
-                        showStickers: _getStickers,
-                        showKeyboard: _onFocusChange,
-                        sendMessage: _sendMessage,
-                      ),
+                          focusNode: _focusNode,
+                          messageController: _messageController,
+                          showStickers: _getStickers,
+                          showKeyboard: _onFocusChange,
+                          sendMessage: _sendMessage,
+                          sendImage: _sendImage),
                     )
                   ],
                 )),
@@ -120,6 +129,31 @@ class _ChatState extends State<ChatPage> {
     setState(() {
       _showStickers = false;
     });
+  }
+
+  /// sends image selected from the gallery app
+  Future<void> _sendImage() async {
+    final File imageFile =
+        await ImagePicker.pickImage(source: ImageSource.gallery);
+    final String downloadURI = await StorageIO().uploadImage(
+        folder: 'MessageImages',
+        imageFile: imageFile,
+        userId: widget.currentUserMap['userId']
+      );
+    
+    final Message imageMesssage = Message(
+      message: downloadURI,
+      senderId: widget.currentUserMap['userId'],
+      receiverId: widget.friendUser.userId,
+      datetime: DateTime.now(),
+      messageType: 3,
+    ); 
+
+    await _fireStoreCRUD.sendImageMessage(
+      message: imageMesssage,
+      recevier: widget.friendUser,
+      sender: User.fromFireStoreCloud(widget.currentUserMap),
+    );
   }
 
   /// sends the selected sticker as message

@@ -197,6 +197,16 @@ class FireStoreCRUD {
     }
   }
 
+  /// sends the image download uri to database storage as a message
+  Future<void> sendImageMessage({@required Message message, @required User sender, @required User recevier}) async {
+    final String messageAddress = getGroupChatId(recevier: recevier, sender: sender);
+    await _database
+        .collection('Messages')
+        .document(messageAddress)
+        .collection(messageAddress)
+        .add(message.toMap());
+  }
+
   /// sends message as a sticker
   Future<void> sendSticker({@required String stickerAddress,
         @required User sender, 

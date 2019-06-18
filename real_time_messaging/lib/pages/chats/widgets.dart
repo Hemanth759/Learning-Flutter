@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -33,10 +34,9 @@ Widget buildChatList({
                   reverse: true,
                   controller: messageScrollController,
                   itemBuilder: (context, index) {
-                    if(index == 0) {
+                    if (index == 0) {
                       return buildMessage(listMessage[index],
-                      currentUser: currentUser,
-                      isLastmessage: true);
+                          currentUser: currentUser, isLastmessage: true);
                     }
                     return buildMessage(listMessage[index],
                         currentUser: currentUser);
@@ -53,7 +53,7 @@ Widget buildMessage(
   DocumentSnapshot doc, {
   @required User currentUser,
   bool isLastmessage: false,
-  }) {
+}) {
   Message message = Message.fromFirestoreCloud(map: doc.data);
   if (message.senderId == currentUser.userId) {
     // should be in right side of the screen
@@ -72,23 +72,43 @@ Widget buildMessage(
                     color: Colors.grey,
                     borderRadius: BorderRadius.circular(8.0)),
                 margin: EdgeInsets.only(
-                    bottom: isLastmessage ? SizeConfig.blockSizeVertical * 6 : SizeConfig.blockSizeVertical * 1,
+                    bottom: isLastmessage
+                        ? SizeConfig.blockSizeVertical * 6
+                        : SizeConfig.blockSizeVertical * 1,
                     left: SizeConfig.blockSizeHorizontal * 45),
               )
-            : message.messageType == 2 
-              ? Container(
-                // sticker here
-                padding: EdgeInsets.only(bottom: isLastmessage ? SizeConfig.blockSizeVertical * 5 : 0.0),
-                width: SizeConfig.blockSizeHorizontal * 85,
-                alignment: Alignment.centerRight,
-                child: Image.asset(
-                  message.message,
-                  fit: BoxFit.fill,
-                  width: SizeConfig.blockSizeHorizontal * 20,
-                  height: SizeConfig.blockSizeVertical * 15,
-                ),
-              )
-              : Container(),
+            : message.messageType == 2
+                ? Container(
+                    // sticker here
+                    padding: EdgeInsets.only(
+                        bottom: isLastmessage
+                            ? SizeConfig.blockSizeVertical * 5
+                            : 0.0),
+                    width: SizeConfig.blockSizeHorizontal * 85,
+                    alignment: Alignment.centerRight,
+                    child: Image.asset(
+                      message.message,
+                      fit: BoxFit.fill,
+                      width: SizeConfig.blockSizeHorizontal * 20,
+                      height: SizeConfig.blockSizeVertical * 15,
+                    ),
+                  )
+                : Container(
+                    // a image from the internet
+                    width: SizeConfig.blockSizeHorizontal * 89,
+                    height: SizeConfig.blockSizeVertical * 25.0,
+                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.only(
+                        bottom: isLastmessage
+                            ? SizeConfig.blockSizeVertical * 5
+                            : 0.0,
+                      ),
+                    child: CachedNetworkImage(
+                      imageUrl: message.message,
+                      placeholder: (context, l) => Loader(),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
       ],
     );
   } else {
@@ -106,21 +126,41 @@ Widget buildMessage(
                     color: Colors.grey,
                     borderRadius: BorderRadius.circular(8.0)),
                 margin: EdgeInsets.only(
-                    bottom: isLastmessage ? SizeConfig.blockSizeVertical * 6 : SizeConfig.blockSizeVertical * 1,
+                    bottom: isLastmessage
+                        ? SizeConfig.blockSizeVertical * 6
+                        : SizeConfig.blockSizeVertical * 1,
                     left: 10.0),
               )
             : message.messageType == 2
-              ? Container(
-                // sticker here
-                padding: EdgeInsets.only(bottom: isLastmessage ? SizeConfig.blockSizeVertical * 5 : 0.0),
-                alignment: Alignment.centerLeft,
-                child: Image.asset(
-                  message.message,
-                  width: SizeConfig.blockSizeHorizontal * 20,
-                  height: SizeConfig.blockSizeVertical * 15,
-                ),
-              ) 
-              : Container()
+                ? Container(
+                    // sticker here
+                    padding: EdgeInsets.only(
+                        bottom: isLastmessage
+                            ? SizeConfig.blockSizeVertical * 5
+                            : 0.0),
+                    alignment: Alignment.centerLeft,
+                    child: Image.asset(
+                      message.message,
+                      width: SizeConfig.blockSizeHorizontal * 20,
+                      height: SizeConfig.blockSizeVertical * 15,
+                    ),
+                  )
+                : Container(
+                    // a image from the internet
+                    width: SizeConfig.blockSizeHorizontal * 89,
+                    height: SizeConfig.blockSizeVertical * 25.0,
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.only(
+                        bottom: isLastmessage
+                            ? SizeConfig.blockSizeVertical * 5
+                            : 0.0,
+                      ),
+                    child: CachedNetworkImage(
+                      imageUrl: message.message,
+                      placeholder: (context, l) => Loader(),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
       ],
     );
   }
@@ -307,7 +347,8 @@ Widget buildInputLayout(
     @required TextEditingController messageController,
     @required Function showStickers,
     @required Function showKeyboard,
-    @required Function sendMessage}) {
+    @required Function sendMessage,
+    @required Function sendImage}) {
   return Container(
     height: SizeConfig.blockSizeVertical * 7,
     width: SizeConfig.blockSizeHorizontal * 100.0,
@@ -319,9 +360,7 @@ Widget buildInputLayout(
             margin: EdgeInsets.symmetric(horizontal: 1.0),
             child: IconButton(
               icon: Icon(Icons.camera_alt),
-              onPressed: () {
-                // TODO: get the image from the gallery app
-              },
+              onPressed: sendImage,
               color: Colors.amber,
             ),
           ),
