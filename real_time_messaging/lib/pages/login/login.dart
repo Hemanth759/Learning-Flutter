@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:real_time_messaging/services/authentication.dart';
 import 'package:real_time_messaging/services/firestoreCRUD.dart';
@@ -23,6 +24,9 @@ class _LoginState extends State<LoginPage> {
 
   @override
   void initState() {
+    FirebaseMessaging().getToken().then((token) {
+      debugPrint('token is: $token');
+    });
     verifyUserStatus();
     super.initState();
   }
